@@ -1,0 +1,72 @@
+newmtl Tex_0081_0.dds
+Ka 1.000 1.000 1.000
+Kd 1.000 1.000 1.000
+Ks 0.000 0.000 0.000
+d 1.0
+illum 2
+map_Ka Tex_0081_0.dds
+map_Kd Tex_0081_0.dds
+map_Ks Tex_0081_0.dds
+newmtl Tex_0079_1.dds
+Ka 1.000 1.000 1.000
+Kd 1.000 1.000 1.000
+Ks 0.000 0.000 0.000
+d 1.0
+illum 2
+map_Ka Tex_0079_1.dds
+map_Kd Tex_0079_1.dds
+map_Ks Tex_0079_1.dds
+newmtl Tex_0081_2.dds
+Ka 1.000 1.000 1.000
+Kd 1.000 1.000 1.000
+Ks 0.000 0.000 0.000
+d 1.0
+illum 2
+map_Ka Tex_0081_2.dds
+map_Kd Tex_0081_2.dds
+map_Ks Tex_0081_2.dds
+newmtl Tex_0081_3.dds
+Ka 1.000 1.000 1.000
+Kd 1.000 1.000 1.000
+Ks 0.000 0.000 0.000
+d 1.0
+illum 2
+map_Ka Tex_0081_3.dds
+map_Kd Tex_0081_3.dds
+map_Ks Tex_0081_3.dds
+newmtl Tex_0049_2.dds
+Ka 1.000 1.000 1.000
+Kd 1.000 1.000 1.000
+Ks 0.000 0.000 0.000
+d 1.0
+illum 2
+map_Ka Tex_0049_2.dds
+map_Kd Tex_0049_2.dds
+map_Ks Tex_0049_2.dds
+newmtl Tex_0081_5.dds
+Ka 1.000 1.000 1.000
+Kd 1.000 1.000 1.000
+Ks 0.000 0.000 0.000
+d 1.0
+illum 2
+map_Ka Tex_0081_5.dds
+map_Kd Tex_0081_5.dds
+map_Ks Tex_0081_5.dds
+newmtl Tex_0080_6.dds
+Ka 1.000 1.000 1.000
+Kd 1.000 1.000 1.000
+Ks 0.000 0.000 0.000
+d 1.0
+illum 2
+map_Ka Tex_0080_6.dds
+map_Kd Tex_0080_6.dds
+map_Ks Tex_0080_6.dds
+newmtl Tex_0036_5.dds
+Ka 1.000 1.000 1.000
+Kd 1.000 1.000 1.000
+Ks 0.000 0.000 0.000
+d 1.0
+illum 2
+map_Ka Tex_0036_5.dds
+map_Kd Tex_0036_5.dds
+map_Ks Tex_0036_5.dds

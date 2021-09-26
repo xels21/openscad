@@ -1,3 +1,15 @@
 [submodule "libs/Round-Anything"]
 	path = libs/Round-Anything
 	url = https://github.com/Irev-Dev/Round-Anything.git
+[submodule "libs/openscad_xels_lib"]
+	path = libs/Round-openscad_xels_lib
+	url = https://github.com/xels21/openscad_xels_lib.git
+[submodule "libs/dotSCAD"]
+	path = libs/dotSCAD
+	url = https://github.com/dotscad/dotscad.git
+[submodule "libs/MCAD"]
+	path = libs/MCAD
+	url = https://github.com/openscad/MCAD.git
+
+
+

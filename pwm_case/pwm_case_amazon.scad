@@ -1,0 +1,56 @@
+use <../libs/Round-Anything/MinkowskiRound.scad>;
+use <../libs/openscad_xels_lib\round.scad>;
+
+
+
+/*
+
+   |----------------|
+  -|                |
+  =|              ()|
+  -|                |
+   |----------------|
+
+
+*/
+
+
+
+x_raw=32;
+y_raw=32;
+z_raw=15;
+
+x_tol=4;
+y_tol=1;
+z_tol=0.5;
+
+x=x_raw+x_tol;
+y=y_raw+y_tol;
+z=z_raw+z_tol;
+
+thickness=2;
+
+x_max = x + 2*thickness;
+y_max = y + 2*thickness;
+z_max = z + 2*thickness;
+
+hole_d=7.5;
+hole_z_fac=1.5;
+
+
+
+pwm_case_amazon();
+
+module pwm_case_amazon(){
+    difference(){
+        minkowskiOutsideRound(thickness)
+        cube([x_max,y_max,z_max],center=true);
+
+        translate([-thickness,0,0])
+        minkowskiOutsideRound(thickness)
+        cube([x_max,y,z],center=true);
+
+        translate([0,0,1.8])
+        rounded_cube_y([x_max*2,hole_d,hole_d*hole_z_fac], r=hole_d*0.49, center=true);
+    }
+}

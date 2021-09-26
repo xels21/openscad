@@ -1,1 +1,12 @@
 *.stl
+*.lnk
+*.vscode
+*.gcode
+# *.jpg
+
+
+# whitelist
+!**/Cover_GT2560/**/*
+!**/Nema_17_support_for_Geeetech_I3_Acrylic/**/*
+!**/_LCD_Screen_Mount_for_GEEETech_i3_Pro_B/**/*
+!**/Geeetech_prusa_i3_pro_B_z-axis_top_mounts/**/*
