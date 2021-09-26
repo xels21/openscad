@@ -1,4 +1,4 @@
-use <../libs/openscad_xels_lib\round.scad>;
+use <../libs/openscad_xels_lib/round.scad>;
 
 
 magnet_d_raw=10;

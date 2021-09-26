@@ -1,4 +1,4 @@
-use <../libs/openscad_xels_lib\round.scad>;
+use <../libs/openscad_xels_lib/round.scad>;
 
 cable_d1 = 15;
 cable_d2 = 2;
