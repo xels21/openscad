@@ -13,15 +13,18 @@ _____________________
 */
 
 
-thickness = 1.5;
+thickness = 2;
 
 d1_i=70;
-d2_i=30;
-d3_i=27;
+d2_o=30;
+d3_o=27;
 h1=30;
 h2=20;
 
-fn=100;
+d2_i=d2_o-2*thickness;
+d3_i=d3_o-2*thickness;
+
+fn=8;
 
 funnel(thickness=thickness,d1_i=d1_i,d2_i=d2_i,d3_i=d3_i,h1=h1,h2=h2,fn=fn);
 
