@@ -28,9 +28,9 @@ y_max = thickness + inner_y + thickness;
 
 z_max = support + tilt + thickness + holder_z;
 
-screw_d = 4.7;
-screw_head_d = 10;
-screw_head_l = 6;
+screw_d = 5.5;
+screw_head_d = 12;
+screw_head_l = 8;
 
 res = 64;
 
