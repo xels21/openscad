@@ -26,7 +26,18 @@ d3_i=d3_o-2*thickness;
 
 fn=8;
 
-funnel(thickness=thickness,d1_i=d1_i,d2_i=d2_i,d3_i=d3_i,h1=h1,h2=h2,fn=fn);
+// funnel(thickness=thickness,d1_i=d1_i,d2_i=d2_i,d3_i=d3_i,h1=h1,h2=h2,fn=fn);
+
+// vapo
+funnel(
+  thickness=1,
+  d1_i=30,
+  d2_i=12,
+  d3_i=10,
+  h1=10,
+  h2=10,
+  fn=64
+);
 
 module funnel(thickness=thickness,d1_i=d1_i,d2_i=d2_i,d3_i=d3_i,h1=h1,h2=h2,fn=fn){
   h_max = h1+h2;
