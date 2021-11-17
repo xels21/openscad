@@ -28,16 +28,36 @@ fn=8;
 
 // funnel(thickness=thickness,d1_i=d1_i,d2_i=d2_i,d3_i=d3_i,h1=h1,h2=h2,fn=fn);
 
+res = 96;
 // vapo
+vap_t=0.8;
+vap_inner_d = 9;
+vap_h=10;
 funnel(
-  thickness=1,
+  thickness=vap_t,
   d1_i=30,
-  d2_i=12,
-  d3_i=10,
-  h1=10,
-  h2=10,
-  fn=64
+  d2_i=vap_inner_d-2*vap_t,
+  d3_i=vap_inner_d-2*vap_t,
+  h1=vap_h,
+  h2=vap_h,
+  fn=res
 );
+
+
+stamp_r=(vap_inner_d-2*vap_t-0.5)/2;
+// cylinder(d=9-2*vap_t-0.5,h=20,$fn=res);
+rotate_extrude($fn=res)
+
+  polygon(points=
+  [
+    [0,0],
+    [0,vap_h*2],
+    [stamp_r+2,vap_h*2],
+    [stamp_r+2,vap_h*2-6],
+    [stamp_r,vap_h*2-8],
+    [stamp_r,0]
+  ]);
+
 
 module funnel(thickness=thickness,d1_i=d1_i,d2_i=d2_i,d3_i=d3_i,h1=h1,h2=h2,fn=fn){
   h_max = h1+h2;
