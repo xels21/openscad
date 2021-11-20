@@ -1,6 +1,7 @@
 MAX_LENGTH_RAW = 550;
-TOL = 8;
-MAX_LENGTH = MAX_LENGTH_RAW-TOL;
+TOL = 6;
+DISTRIBUTOR_W=43;
+MAX_LENGTH = MAX_LENGTH_RAW-TOL-DISTRIBUTOR_W;
 FIL_COUNT = 4;
 
 FIL_W_MAX = 116;
@@ -18,17 +19,16 @@ PAIR_COUNT = FIL_COUNT-1;
 SCREW_D = 3;
 SCREW_L = 30;
 SCREW_OFF = 13;
-SCREW_D2 = 7;
+SCREW_D2 = 6;
 SCREW_H2 = 2.5;
 
-STABILAZER = 5;
-RAD=2.5;
+STABILAZER = 7;
+RAD = 2.5;
 
 HOLDER_NIBBLE = 2;
 
-DISTRIBUTOR_W=43;
 
-SINGLE_BASE_W = SCREW_D + 1.4*THICKNESS;
+SINGLE_BASE_W = SCREW_D + 0.65*THICKNESS;
 
 module screw(){
   SCREW_MAX_H = SCREW_L+FILL_H;
@@ -59,9 +59,14 @@ echo("SINGLE_BASE_W: ", str(SINGLE_BASE_W));
 echo("------------");
 echo("PAIR_BASE_W: ", str(PAIR_BASE_W));
 echo("------------");
-echo(2*SINGLE_BASE_W+4*FIL_W_MAX+3*PAIR_BASE_W+TOL)
+echo(2*SINGLE_BASE_W+4*FIL_W_MAX+3*PAIR_BASE_W+TOL+DISTRIBUTOR_W)
 echo("------------");
 
+
+// V1:
+// ECHO: "SINGLE_BASE_W: ", "11.4"
+// ECHO: "------------"
+// ECHO: "PAIR_BASE_W: ", "18.4"
 /*
  __ __
 | || |
@@ -150,8 +155,7 @@ module single_outer(){
   offset(r=-RAD)
   offset(r=RAD)
   polygon(points=[
-    [0,STABILAZER],
-    [-STABILAZER,0],
+    [0,0],
     [SINGLE_BASE_W+STABILAZER,0],
     [SINGLE_BASE_W,STABILAZER],
     [SINGLE_BASE_W,FILL_H],
