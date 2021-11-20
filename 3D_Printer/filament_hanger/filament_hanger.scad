@@ -4,7 +4,7 @@ MAX_LENGTH = MAX_LENGTH_RAW-TOL;
 FIL_COUNT = 4;
 
 FIL_W_MAX = 116;
-FILL_W_OFFSET = 10;
+FILL_W_OFFSET = 9;
 FIL_W = FIL_W_MAX-2*FILL_W_OFFSET;
 
 FILL_H = 38;
@@ -21,7 +21,12 @@ SCREW_OFF = 13;
 SCREW_D2 = 7;
 SCREW_H2 = 2.5;
 
-STABILAZER = 3;
+STABILAZER = 5;
+RAD=2.5;
+
+HOLDER_NIBBLE = 2;
+
+DISTRIBUTOR_W=43;
 
 SINGLE_BASE_W = SCREW_D + 1.4*THICKNESS;
 
@@ -78,6 +83,7 @@ echo("------------");
 */
 
     // screw();
+
     translate([0,0,FILL_H+THICKNESS])
 rotate([-90,0,0]){
   translate([PAIR_BASE_W+FILL_W_OFFSET,0,0])
@@ -85,46 +91,55 @@ rotate([-90,0,0]){
   pair();
 }
 
+  // pair();
+
 // pair_outer();
 
 module pair(){
     difference(){
     pair_outer();
-    translate([0,0,1/5*LENGTH])
+    translate([0,0,1/6*LENGTH])
     screw();
-    translate([0,0,4/5*LENGTH])
+    translate([0,0,3/6*LENGTH])
+    screw();
+    translate([0,0,5/6*LENGTH])
     screw();
   }
 }
 module pair_outer(){
-  linear_extrude(LENGTH)
 
-  offset(r=-3)
-  offset(r=3)
-  polygon(points=[
+
+ points = [
+    [0,0],
     [PAIR_BASE_W/2+STABILAZER,0],
     [PAIR_BASE_W/2,STABILAZER],
     [PAIR_BASE_W/2,FILL_H],
-    [PAIR_BASE_W/2+FILL_W_OFFSET,FILL_H],
+    [PAIR_BASE_W/2+FILL_W_OFFSET-HOLDER_NIBBLE,FILL_H],
+    [PAIR_BASE_W/2+FILL_W_OFFSET-HOLDER_NIBBLE,FILL_H-HOLDER_NIBBLE],
+    [PAIR_BASE_W/2+FILL_W_OFFSET,FILL_H-HOLDER_NIBBLE],
+    // [PAIR_BASE_W/2+FILL_W_OFFSET,FILL_H],
     [PAIR_BASE_W/2+FILL_W_OFFSET,FILL_H+THICKNESS],
-    [0,FILL_H+THICKNESS],
-
-    [-(PAIR_BASE_W/2+FILL_W_OFFSET),FILL_H+THICKNESS],
-    [-(PAIR_BASE_W/2+FILL_W_OFFSET),FILL_H],
-    [-(PAIR_BASE_W/2),FILL_H],
-    [-(PAIR_BASE_W/2),STABILAZER],
-    [-(PAIR_BASE_W/2)-STABILAZER,0],
-
-    ]);
+    [0,FILL_H+THICKNESS]
+    ];
+  linear_extrude(LENGTH)
+  offset(r=-RAD)
+  offset(r=RAD)
+  union(){
+    polygon(points=points);
+    mirror([1,0,0])
+    polygon(points=points);
+  }
 }
 
 
 module single(){
   difference(){
     single_outer();
-    translate([SINGLE_BASE_W/2,0,1/5*LENGTH])
+    translate([SINGLE_BASE_W/2,0,1/6*LENGTH])
     screw();
-    translate([SINGLE_BASE_W/2,0,4/5*LENGTH])
+    translate([SINGLE_BASE_W/2,0,3/6*LENGTH])
+    screw();
+    translate([SINGLE_BASE_W/2,0,5/6*LENGTH])
     screw();
   }
 }
@@ -132,15 +147,17 @@ module single_outer(){
 
   linear_extrude(LENGTH)
 
-  offset(r=-3)
-  offset(r=3)
+  offset(r=-RAD)
+  offset(r=RAD)
   polygon(points=[
     [0,STABILAZER],
     [-STABILAZER,0],
     [SINGLE_BASE_W+STABILAZER,0],
     [SINGLE_BASE_W,STABILAZER],
     [SINGLE_BASE_W,FILL_H],
-    [SINGLE_BASE_W+FILL_W_OFFSET,FILL_H],
+    [SINGLE_BASE_W+FILL_W_OFFSET-HOLDER_NIBBLE,FILL_H],
+    [SINGLE_BASE_W+FILL_W_OFFSET-HOLDER_NIBBLE,FILL_H-HOLDER_NIBBLE],
+    [SINGLE_BASE_W+FILL_W_OFFSET,FILL_H-HOLDER_NIBBLE],
     [SINGLE_BASE_W+FILL_W_OFFSET,FILL_H+THICKNESS],
     [0,FILL_H+THICKNESS]]);
 
