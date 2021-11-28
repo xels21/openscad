@@ -5,9 +5,9 @@ use <../libs/openscad_xels_lib/round.scad>;
 
 
 //With of the phone
-phoneWRaw = 79;
+phoneWRaw = 76;
 //Depth of your phone
-phoneDRaw = 11;
+phoneDRaw = 10;
 
 
 
@@ -20,18 +20,23 @@ phoneDTol = 0.5;
 
 thickness=2;
 phoneFrameSide=4;
-phoneFrameBottom=7;
+phoneFrameBottom=8;
 
 phoneW = phoneWRaw + phoneWTol;
 phoneD = phoneDRaw + phoneDTol;
 
-phoneH = 23;
+phoneH = 25;
 
-clipMountH= 20;
-clipMountW= 20;
+clipMountH= 15;
+clipMountW= 13.5;
+
+fan_clip_h_raw=3;
+fan_clip_h_tol=1;
+fan_clip_h_span=1.6;
+fan_clip_w=13;
 
 clipMountD = 3.5;
-
+clip_tol=0.4;
 
 clip_screw_thickness=3.5;
 clip_screw_h=30;
@@ -41,18 +46,64 @@ clip_screw_d_inner = clip_screw_d_sum-2*clip_screw_thickness;
 clip_screw_tol=0.3;
  
 
+charger_w=15;
+aux_l_offset=16;
+
     // rounded_cube_x([10,10,10, r=2], center=false);
     // cube([10,10,10]);
 //rendering phone case
-phone_holer(withClip=false, withCharger=false, withPattern=false);
+// translate([phoneD+3*thickness+clipMountD+2*clip_tol - thickness,-phoneW/2-thickness+clipMountW/2,0])
+rotate([0,0,90])
+phone_holer(withClip=true, charger_w=charger_w, withPattern=false, aux_l_offset=aux_l_offset);
 // clip_screw_inner();
 //rendering screw holder
 // translate([10,-15,0])
 // union(){
   //clip_screw_inner();
-  //translate([clip_screw_d_sum+1,0,0]) rotate([0,0,60]) clip_screw_outer();
+  
+  // translate([clip_screw_d_sum+1,0,0]) 
+  // rotate([0,0,60]) 
+  // clip_screw_outer();
 // }
+translate([0,-3,0])
+rotate([90,0,0])
+clip_fan();
 
+module clip_fan(){
+  clipBottomW=2*thickness+2*clip_tol;
+  fan_clip_sum = 2*thickness+fan_clip_h_tol+fan_clip_h_raw;
+  // cube([clip_screw_d_sum/2+clipMountD+thickness*2 , clipMountW  ,clipMountD]);
+
+  translate([-clipBottomW+thickness,0,0])
+  union(){
+    clip_fan_clip();
+
+    translate([0,0,fan_clip_sum])
+    mirror([0,0,1])
+    clip_fan_clip();
+  }
+
+  translate([-clipBottomW,0,0])
+  cube([thickness , clipMountW , fan_clip_sum]);
+
+  translate([-clipBottomW,0,0])
+  cube([clipBottomW, clipMountW, fan_clip_sum-thickness*.5]);
+  cube([clipMountD , clipMountW , clipMountH+clipMountD]);
+}
+
+module clip_fan_clip(){
+  translate([0,fan_clip_w,0])
+  rotate([90,0,0])
+  linear_extrude(fan_clip_w)
+  offset(-thickness/2)
+  offset(thickness/2)
+  polygon(points=[
+    [0,0],
+    [-clipMountH, 0+ fan_clip_h_span/2],
+    [-clipMountH, thickness+ fan_clip_h_span/2],
+    [0, thickness],
+    ]);
+}
 
 
 module clip_screw_outer(){
@@ -100,14 +151,14 @@ module clip_mount(clip_tol){
 }
 
 
-module phone_holer(withClip=true, withCharger=true, withPattern=true){
+module phone_holer(withClip=true, charger_w=0, withPattern=true, aux_l_offset=-1){
   
   if(withClip){
     clip_tol=0.4;
     
     clipWSum = clipMountW+thickness+2+clip_tol*2;
     
-    translate([(phoneWSum-clipWSum)/2,phoneD+thickness,0]) clip_mount(0.4);
+    translate([(phoneWSum-clipWSum)/2,phoneD+thickness,0]) clip_mount(clip_tol);
   };
 
   phoneWSum=phoneW+(thickness*2);
@@ -123,7 +174,7 @@ module phone_holer(withClip=true, withCharger=true, withPattern=true){
     //upper cut off
     translate([0,0,phoneH+(thickness*2)]) cube([phoneWSum, phoneDSum, rad]);
     
-    if(withCharger){
+    if(withPattern){
       //pattern
       pAmount=6;
       wEntirePart=phoneWSum/(pAmount+1);
@@ -148,9 +199,19 @@ module phone_holer(withClip=true, withCharger=true, withPattern=true){
     */
     
     //charger cut
-    if(withCharger){
-      cutVar=2;
-      translate([phoneWSum/2,-cutVar,0]) cylinder(r1=phoneD+thickness,r2=cutVar+phoneD+thickness, h=phoneFrameBottom+thickness, $fn=64);
+    if(charger_w>0){
+      //cutVar=2;
+      r=2;
+      translate([phoneWSum/2-charger_w/2,-r,0]) 
+      rounded_cube_z([charger_w,phoneD+thickness+r,phoneH], r=r);
+      //cylinder(r1=phoneD+thickness,r2=cutVar+phoneD+thickness, h=phoneFrameBottom+thickness, $fn=64);
+    }
+
+    if(aux_l_offset>=0){
+      // aux_l_offset
+      aux_d=phoneD+2*thickness;
+      translate([thickness + aux_l_offset, aux_d/2-thickness, 0])
+      cylinder(d=aux_d, h=thickness+phoneFrameBottom);
     }
 
     //inner (phone) cube
