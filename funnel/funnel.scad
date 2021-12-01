@@ -30,7 +30,7 @@ fn=8;
 
 res = 96;
 // vapo
-vap_t=0.8;
+vap_t=1;
 vap_inner_d = 9;
 vap_h=10;
 funnel(
@@ -44,15 +44,17 @@ funnel(
 );
 
 
+
 stamp_r=(vap_inner_d-2*vap_t-0.5)/2;
 // cylinder(d=9-2*vap_t-0.5,h=20,$fn=res);
+translate([d1_i/3,0,-vap_h])
 rotate_extrude($fn=res)
 
   polygon(points=
   [
     [0,0],
-    [0,vap_h*2],
-    [stamp_r+2,vap_h*2],
+    [0,vap_h*3],
+    [stamp_r+2,vap_h*3],
     [stamp_r+2,vap_h*2-6],
     [stamp_r,vap_h*2-8],
     [stamp_r,0]
