@@ -1,25 +1,18 @@
-d=64;
-r_help=0.5; //needed for printing issues
-r=d/2;
-r_plus=3;
-h2=5;
-h1=3;
-
-
-h_diff= h2-h1;
-
 res=256;
 
-rotate_extrude($fn=res){
-  
-  
+belt(inner_r=(64/2), r_help=0.5,depth=3,outer_h=5,inner_h=3);
+
+module belt(inner_r, r_help, depth, outer_h, inner_h){
+  h_diff= outer_h-inner_h;
+  // rotate_extrude($fn=res)
+  translate([inner_r,0,0])
   polygon(points=[
-    [r+r_plus,0],
-    [r-r_help+r_plus,0],
-    [r,h_diff],
-    [r,h_diff/2+h1],
-    [r-r_help+r_plus,h2],
-    [r+r_plus,h2]
+    [depth,0],
+    [depth-r_help,0],
+    [0,h_diff/2],
+    [0,h_diff/2+inner_h],
+    [depth-r_help,outer_h],
+    [depth,outer_h]
   ]);
 
 }
