@@ -16,7 +16,7 @@ phoneDRaw = 10;
 PI=3.141592;
 
 phoneWTol = 1;
-phoneDTol = 0.5;
+phoneDTol = 0.3;
 
 thickness=2;
 phoneFrameSide=4;
@@ -28,12 +28,14 @@ phoneD = phoneDRaw + phoneDTol;
 phoneH = 25;
 
 clipMountH= 15;
-clipMountW= 13.5;
+clipMountW= phoneWRaw;
+// clipMountW= 13.5;
+fan_clip_w=clipMountW;
+// fan_clip_w=13;
 
 fan_clip_h_raw=3;
 fan_clip_h_tol=1;
 fan_clip_h_span=1.6;
-fan_clip_w=13;
 
 clipMountD = 3.5;
 clip_tol=0.4;
@@ -53,7 +55,8 @@ aux_l_offset=16;
     // cube([10,10,10]);
 //rendering phone case
 // translate([phoneD+3*thickness+clipMountD+2*clip_tol - thickness,-phoneW/2-thickness+clipMountW/2,0])
-rotate([0,0,90])
+translate([phoneW+2*thickness,phoneD+8*thickness,])
+rotate([0,0,180])
 phone_holer(withClip=true, charger_w=charger_w, withPattern=false, aux_l_offset=aux_l_offset);
 // clip_screw_inner();
 //rendering screw holder
@@ -65,9 +68,39 @@ phone_holer(withClip=true, charger_w=charger_w, withPattern=false, aux_l_offset=
   // rotate([0,0,60]) 
   // clip_screw_outer();
 // }
-translate([0,-3,0])
-rotate([90,0,0])
-clip_fan();
+
+// translate([0,-3,0])
+// rotate([90,0,0])
+// clip_fan();
+cd_mount();
+
+
+module cd_mount(){
+  // cd_d = 120;
+  cd_h = 2.8;
+  cd_l = 35;
+
+  // clipBottomW=2*thickness+2*clip_tol;
+  // fan_clip_sum = 2*thickness+fan_clip_h_tol+fan_clip_h_raw;
+  // cube([clip_screw_d_sum/2+clipMountD+thickness*2 , clipMountW  ,clipMountD]);
+
+  // translate([-clipBottomW,0,0])
+  // cube([thickness , clipMountW , fan_clip_sum]);
+
+
+  translate([0,-cd_l+clipMountD,0])
+  minkowskiOutsideRound(rad)
+  cube([clipMountW, cd_l, clipMountD]);
+  difference(){
+    cube([clipMountW, clipMountD, clipMountH+cd_h]);
+    if(clipMountW>50){
+      differencerW=thickness+2*clip_tol;
+      translate([(clipMountW-differencerW)/2,0,0])
+      cube([differencerW, clipMountD, clipMountH+cd_h]);
+    }
+  }
+
+}
 
 module clip_fan(){
   clipBottomW=2*thickness+2*clip_tol;
@@ -144,9 +177,15 @@ module clip_screw_inner(){
 
 module clip_mount(clip_tol){
   //clip mount
+  clipMountWSum=clipMountW+thickness*2+clip_tol*2;
   difference(){
-    cube([clipMountW+thickness*2+clip_tol*2,clipMountD+thickness*2+clip_tol*2,clipMountH]);
-    translate([thickness+clip_tol,thickness+clip_tol,0]) cube([clipMountW+clip_tol,clipMountD+clip_tol,clipMountH]);
+    cube([clipMountWSum,clipMountD+thickness*2+clip_tol*2,clipMountH]);
+    translate([thickness+clip_tol,thickness+clip_tol,0]) 
+    cube([clipMountW+clip_tol,clipMountD+clip_tol,clipMountH]);
+  }
+  if(clipMountW>50){
+    translate([(clipMountWSum-thickness)/2,thickness+clip_tol,0])
+    cube([thickness, clipMountD+clip_tol, clipMountH]);
   }
 }
 
@@ -156,9 +195,10 @@ module phone_holer(withClip=true, charger_w=0, withPattern=true, aux_l_offset=-1
   if(withClip){
     clip_tol=0.4;
     
-    clipWSum = clipMountW+thickness+2+clip_tol*2;
+    clipWSum = clipMountW+thickness+2+clip_tol;
     
-    translate([(phoneWSum-clipWSum)/2,phoneD+thickness,0]) clip_mount(clip_tol);
+    translate([(phoneWSum-clipWSum)/2,phoneD+thickness,0]) 
+    clip_mount(clip_tol);
   };
 
   phoneWSum=phoneW+(thickness*2);
