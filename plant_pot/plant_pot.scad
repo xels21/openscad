@@ -10,8 +10,26 @@ thickness=2;
 res=128;
 
 
-// geodesic_sphere(d_up*0.85, $fn=26);
-pot(d_up=d_up+1, d_down=d_down+1, h=h+1, thickness=thickness);
+
+// translate([0,0,h*.6]) 
+// pot(d_up=d_up+1, d_down=d_down+1, h=h+1, thickness=thickness);
+
+under_pot(d=(d_up+1)*1,thickness=2,offset=16,up_plus=4);
+
+module under_pot(d,thickness,offset,up_plus, up_fac=3){
+    
+    rotate_extrude($fn=16)
+    union(){
+        square([d/2+offset,thickness]);
+        translate([d/2+offset-up_plus,thickness,0])
+        scale([1,up_fac,1]) 
+        intersection() {
+            circle(r=up_plus, $fn=16);
+            translate([-up_plus,0,0]) 
+            square([up_plus*2,up_plus]);
+        }
+    }
+}
 
 module pot(d_up, d_down, h, thickness){
     intersection() {
