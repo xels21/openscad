@@ -3,7 +3,7 @@ use <..\libs\openscad_xels_lib\connector\vert_clip.scad>;
 thickness = 8;
 
 z       =.5;      //height
-// z       =40;      //height
+// z       = 30;      //height
 left    = thickness/2;      //left side
 hold    = thickness;      //lenght of the "middle" part
 right   = thickness;      //right side
@@ -14,12 +14,12 @@ add     = thickness/2;
 
 
 stab_support_h = 20;
-xbox_height    = 70;
-height_plus    = 30;
+xbox_height    = 55;
+height_plus    = 35;
 
 max_h = stab_support_h + xbox_height + height_plus;
 
-stand_w=70;
+stand_w=55;
 
 xbox_holder_h=12;
 xbox_holder_h_minus=3;
@@ -37,13 +37,18 @@ points=[
 ,[stand_w+thickness,stab_support_h+thickness+xbox_holder_h-xbox_holder_h_minus]
 ,[stand_w+xbox_holder_h_clip,stab_support_h+thickness+xbox_holder_h]
 ,[stand_w-xbox_holder_h_clip,stab_support_h+thickness+xbox_holder_h]
-,[stand_w,stab_support_h+thickness+0.2*xbox_holder_h]
-,[stand_w-0.2*xbox_holder_h,stab_support_h+thickness]
+,[stand_w,stab_support_h+thickness+0.4*xbox_holder_h]
+// ,[stand_w-0.2*xbox_holder_h,stab_support_h+thickness]
 ,[stand_w-xbox_down_w+xbox_down_rad,stab_support_h+thickness]
 ,[stand_w-xbox_down_w-xbox_down_rad,stab_support_h+thickness+xbox_down_rad]
 ,[-rad,xbox_height+stab_support_h]
 ,[-2*rad,max_h+2*rad]
 ];
+
+
+// translate([0,90,0])
+// rotate([0,0,42])
+// square([1,100],center=true);
 
 
 xbox_controller_mount();
