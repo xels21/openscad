@@ -21,12 +21,12 @@ max_h = stab_support_h + xbox_height + height_plus;
 
 stand_w=70;
 
-xbox_holder_h=17;
-xbox_holder_h_minus=5;
+xbox_holder_h=12;
+xbox_holder_h_minus=3;
 xbox_holder_h_clip=1;
 
-xbox_down_w=20;
-xbox_down_rad=3;
+xbox_down_w=16;
+xbox_down_rad=2;
 
 rad=2;
 
@@ -37,8 +37,8 @@ points=[
 ,[stand_w+thickness,stab_support_h+thickness+xbox_holder_h-xbox_holder_h_minus]
 ,[stand_w+xbox_holder_h_clip,stab_support_h+thickness+xbox_holder_h]
 ,[stand_w-xbox_holder_h_clip,stab_support_h+thickness+xbox_holder_h]
-,[stand_w,stab_support_h+thickness+0.3*xbox_holder_h]
-,[stand_w-0.3*xbox_holder_h,stab_support_h+thickness]
+,[stand_w,stab_support_h+thickness+0.2*xbox_holder_h]
+,[stand_w-0.2*xbox_holder_h,stab_support_h+thickness]
 ,[stand_w-xbox_down_w+xbox_down_rad,stab_support_h+thickness]
 ,[stand_w-xbox_down_w-xbox_down_rad,stab_support_h+thickness+xbox_down_rad]
 ,[-rad,xbox_height+stab_support_h]
