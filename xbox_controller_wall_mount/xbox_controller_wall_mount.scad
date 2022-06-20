@@ -56,82 +56,51 @@ points = [
   [ -2 * rad, max_h + 2 * rad ]
 ];
 
-// xbox_controller_mount_rounded();
-xbox_controller_mount();
+res = 64;
 
-// container();
+xbox_controller_mount();
+// top_mount();
 
 module
-xbox_controller_mount_rounded()
+top_mount()
 {
-  intersection()
+  difference()
   {
-    container();
-    linear_extrude(outer_w)
+    union()
     {
-      translate([ thickness, thickness, 0 ])
+      translate([0,-2.42 * thickness,0]) 
+      cube([ 0.5, 2.42 * thickness, inner_w ]);
+
+      cube([ thickness, 2 * thickness, inner_w ]);
+
+      translate([ 0, thickness * 2, inner_w / 2 ])
       {
-        // UPPER CLIP
-        translate([ -thickness, max_h, 0 ])
+        rotate([ 0, 90, 0 ]) linear_extrude(height = thickness)
         {
-          vert_clip_pos_2d(left = left,
-                           hold = hold,
-                           hold_plus = hold_plus,
-                           base = base,
-                           tol = -tol,
-                           add = add);
-        }
-
-        // WALL_CONNECTOR
-        translate([ 0, 2.5 * thickness, 0 ])
-        {
-          polygon([
-            [ 0, 0 ],
-            [ -thickness, 0 ],
-            [ -thickness, max_h - 2.5 * thickness - tol ],
-            [ 0, max_h - 2 * thickness ]
-          ]);
-        }
-
-        // LOWER CLIP
-        translate([ -thickness, 2.5 * thickness, 0 ])
-        {
-          vert_clip_neg_2d(left = left,
-                           hold = hold,
-                           hold_plus = hold_plus,
-                           base = base,
-                           tol = -tol,
-                           tol = 0,
-                           add = add,
-                           right = right);
+          intersection()
+          {
+            translate([ -inner_w / 2, 0 ]) square([ inner_w, inner_w ]);
+            circle(r = inner_w / 2, $fn = res);
+          }
         }
       }
+      vert_clip_neg(height = inner_w,
+                    left = left,
+                    hold = hold,
+                    hold_plus = hold_plus,
+                    base = base,
+                    tol = -tol,
+                    add = add,
+                    right = right);
     }
-  }
 
-  minkowskiRound(2)
-  {
-    intersection()
+    union()
     {
-      container();
-      linear_extrude(outer_w)
+      translate([ 0, thickness / 2 + inner_w / 2, inner_w / 2 ])
       {
-        translate([ thickness, thickness, 0 ])
+        rotate([ 0, 90, 0 ])
         {
-          // difference() {
-          offset(rad)
-          {
-            offset(-rad)
-            {
-              polygon(points);
-            }
-          }
-
-          // offset(1)
-          // offset(-7)
-          // polygon(points=points);
-
-          // }
+          cylinder(h = thickness, r = 3, $fn = res);
         }
       }
     }
@@ -224,6 +193,83 @@ xbox_controller_mount_2d()
                        tol = 0,
                        add = add,
                        right = right);
+    }
+  }
+}
+
+module
+xbox_controller_mount_rounded()
+{
+  intersection()
+  {
+    container();
+    linear_extrude(outer_w)
+    {
+      translate([ thickness, thickness, 0 ])
+      {
+        // UPPER CLIP
+        translate([ -thickness, max_h, 0 ])
+        {
+          vert_clip_pos_2d(left = left,
+                           hold = hold,
+                           hold_plus = hold_plus,
+                           base = base,
+                           tol = -tol,
+                           add = add);
+        }
+
+        // WALL_CONNECTOR
+        translate([ 0, 2.5 * thickness, 0 ])
+        {
+          polygon([
+            [ 0, 0 ],
+            [ -thickness, 0 ],
+            [ -thickness, max_h - 2.5 * thickness - tol ],
+            [ 0, max_h - 2 * thickness ]
+          ]);
+        }
+
+        // LOWER CLIP
+        translate([ -thickness, 2.5 * thickness, 0 ])
+        {
+          vert_clip_neg_2d(left = left,
+                           hold = hold,
+                           hold_plus = hold_plus,
+                           base = base,
+                           tol = -tol,
+                           tol = 0,
+                           add = add,
+                           right = right);
+        }
+      }
+    }
+  }
+
+  minkowskiRound(2)
+  {
+    intersection()
+    {
+      container();
+      linear_extrude(outer_w)
+      {
+        translate([ thickness, thickness, 0 ])
+        {
+          // difference() {
+          offset(rad)
+          {
+            offset(-rad)
+            {
+              polygon(points);
+            }
+          }
+
+          // offset(1)
+          // offset(-7)
+          // polygon(points=points);
+
+          // }
+        }
+      }
     }
   }
 }
