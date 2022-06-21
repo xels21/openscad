@@ -58,8 +58,8 @@ points = [
 
 res = 64;
 
-xbox_controller_mount();
-// top_mount();
+// xbox_controller_mount();
+top_mount();
 
 module
 top_mount()
@@ -100,7 +100,9 @@ top_mount()
       {
         rotate([ 0, 90, 0 ])
         {
-          cylinder(h = thickness, r = 3, $fn = res);
+          cylinder(h = thickness, r = 2, $fn = res);
+          translate([0,0,4])
+          cylinder(h = thickness-4, r1 = 2, r2 = 4, $fn = res);
         }
       }
     }
