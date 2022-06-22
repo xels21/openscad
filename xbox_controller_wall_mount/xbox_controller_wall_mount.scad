@@ -4,7 +4,7 @@ use <../libs/openscad_xels_lib/connector/vert_clip.scad>;
 thickness = 8;
 
 inner_w = 20;
-outer_w = 50;
+outer_w = 60;
 diff_w = outer_w - inner_w;
 
 left = thickness / 2;      // left side
@@ -12,7 +12,7 @@ hold = thickness;          // lenght of the "middle" part
 right = thickness;         // right side
 hold_plus = thickness / 2; // amount of "hold" thats really holding
 base = thickness;
-tol = 0.15;
+tol = 0.1;
 add = thickness / 2;
 
 stab_support_h = 20;
@@ -58,21 +58,40 @@ points = [
 
 res = 64;
 
-// xbox_controller_mount();
-top_mount();
+export_top = false;
+export_mount = false;
+export_bottom = false;
+
+if (export_top) {
+  top_mount();
+}
+if (export_mount) {
+  xbox_controller_mount();
+}
+if (export_bottom) {
+  bottom_mount();
+}
 
 module
+bottom_mount()
+{
+  end_mount(is_top = false);
+}
+module
 top_mount()
+{
+  end_mount(is_top = true);
+}
+
+module
+end_mount(is_top = true)
 {
   difference()
   {
     union()
     {
-      translate([0,-2.42 * thickness,0]) 
-      cube([ 0.5, 2.42 * thickness, inner_w ]);
-
+      // START HALF CIRCLE
       cube([ thickness, 2 * thickness, inner_w ]);
-
       translate([ 0, thickness * 2, inner_w / 2 ])
       {
         rotate([ 0, 90, 0 ]) linear_extrude(height = thickness)
@@ -84,16 +103,31 @@ top_mount()
           }
         }
       }
-      vert_clip_neg(height = inner_w,
-                    left = left,
-                    hold = hold,
-                    hold_plus = hold_plus,
-                    base = base,
-                    tol = -tol,
-                    add = add,
-                    right = right);
+      // END HALF CIRCLE
+      if (is_top) {
+        vert_clip_neg(height = inner_w,
+                      left = left,
+                      hold = hold,
+                      hold_plus = hold_plus,
+                      base = base,
+                      tol = -tol,
+                      add = add,
+                      right = right);
+      } else {
+        mirror([ 0, 1, 0 ])
+        {
+          vert_clip_pos(height = inner_w,
+                        left = left,
+                        hold = hold,
+                        hold_plus = hold_plus,
+                        base = base,
+                        tol = -tol,
+                        add = add,
+                        right = right);
+        }
+      }
     }
-
+    // START SCREW
     union()
     {
       translate([ 0, thickness / 2 + inner_w / 2, inner_w / 2 ])
@@ -101,11 +135,12 @@ top_mount()
         rotate([ 0, 90, 0 ])
         {
           cylinder(h = thickness, r = 2, $fn = res);
-          translate([0,0,4])
-          cylinder(h = thickness-4, r1 = 2, r2 = 4, $fn = res);
+          translate([ 0, 0, 4 ])
+            cylinder(h = thickness - 4, r1 = 2, r2 = 4, $fn = res);
         }
       }
     }
+    // END SCREW
   }
 }
 
@@ -192,7 +227,6 @@ xbox_controller_mount_2d()
                        hold_plus = hold_plus,
                        base = base,
                        tol = -tol,
-                       tol = 0,
                        add = add,
                        right = right);
     }
