@@ -58,8 +58,11 @@ points = [
 
 res = 64;
 
+// export_top = true;
 export_top = false;
+// export_mount = true;
 export_mount = false;
+// export_bottom = true;
 export_bottom = false;
 
 if (export_top) {
@@ -135,8 +138,8 @@ end_mount(is_top = true)
         rotate([ 0, 90, 0 ])
         {
           cylinder(h = thickness, r = 2, $fn = res);
-          translate([ 0, 0, 4 ])
-            cylinder(h = thickness - 4, r1 = 2, r2 = 4, $fn = res);
+          translate([ 0, 0, 6 ])
+            cylinder(h = thickness - 6, r1 = 2, r2 = 4, $fn = res);
         }
       }
     }
