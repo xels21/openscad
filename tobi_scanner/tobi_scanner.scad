@@ -1,3 +1,6 @@
+use <../libs/Round-Anything/MinkowskiRound.scad>;
+
+
 
 p_h=35;
 p_h_off=4;
@@ -11,7 +14,7 @@ profile_diff_t = profile_t - p_inner_t;
 d_1=130;
 d_2=115;
 
-// res=32;
+res=32;
 res=256;
 
 
@@ -21,10 +24,13 @@ screw_inner_top_d=8;
 screw_inner_top_h=3;
 screw_h=10;
 
+rounding = 1;
+
 // mirror([1,0,0]) 
 all();
 
 module all(){
+  minkowskiOutsideRound(rounding) 
   raw_w_profile();
 
   // bottom
@@ -69,11 +75,16 @@ difference(){
 
 module raw_w_profile(){
   difference(){
-    linear_extrude(p_h) 
+    translate([0,0,-rounding]) 
+    linear_extrude(p_h+rounding) 
     raw();
+    
     translate([0,0,p_h_off]) 
     linear_extrude(p_h_inner) 
     raw(d_1=d_1-profile_diff_t*2, d_2=d_2-profile_diff_t*2);
+    
+    translate([0,0,-rounding/2]) 
+    cube([d_1*2,d_1*2,rounding],center=true);
   }
 }
 
@@ -81,12 +92,12 @@ module raw(d_1=d_1,d_2=d_2){
   half_circle(d=d_1,t=profile_t, is_left=true);
   translate([0,(d_1-d_2)/2,0]) 
   half_circle(d=d_2,t=profile_t, is_left=false);
-  extension(d_1);
+  extension(d_1,length=70);
 }
 
-module extension(d_1=d_1){
+module extension(d_1=d_1,length){
   translate([0,-d_1/2]) 
-  square([d_1/2,profile_t]);
+  square([length,profile_t]);
 }
 module half_circle(d,t,is_left)
 difference(){
