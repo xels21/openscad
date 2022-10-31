@@ -14,7 +14,7 @@ profile_diff_t = profile_t - p_inner_t;
 d_1=130;
 d_2=115;
 
-res=32;
+// res=32;
 res=256;
 
 
@@ -78,7 +78,7 @@ module raw_w_profile(){
     translate([0,0,-rounding]) 
     linear_extrude(p_h+rounding) 
     raw();
-    
+
     translate([0,0,p_h_off]) 
     linear_extrude(p_h_inner) 
     raw(d_1=d_1-profile_diff_t*2, d_2=d_2-profile_diff_t*2);
