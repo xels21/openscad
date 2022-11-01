@@ -1,0 +1,1 @@
+clang-format -style=Google -dump-config > google.openscad-format
