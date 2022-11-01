@@ -78,7 +78,7 @@ module raw_w_p(){
     translate([0,0,-rounding]) 
     linear_extrude(p_h+rounding) 
     raw(d_1=d_1, d_2=d_2);
-    
+
     translate([0,0,p_h_off]) 
     linear_extrude(p_h_inner) 
     raw(d_1=d_1-p_diff_t*2, d_2=d_2-p_diff_t*2);
