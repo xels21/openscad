@@ -1,23 +1,24 @@
 
-res = 64;
+res = 128;
 valve_inner_d = 7;
 valve_max_l = 18;
 connector_l = 3;
-out_tol = 0.3;
+out_tol = -0.2;
 out_outer_d_raw = 4.5;
 out_outer_d = out_outer_d_raw - out_tol;
 out_outer_r = out_outer_d / 2;
 
-out_max_l = 11;
+out_max_l = 10.5;
 
-valve_tol = 0.8;
+valve_tol = 0;
 valve_outer_d_raw = 11;
 valve_outer_d = valve_outer_d_raw - valve_tol;
 valve_outer_r = valve_outer_d / 2;
 
 max_l = valve_max_l + connector_l + out_max_l;
-thickness = 3;
+thickness = 2;
 
+// all_2d();
 all();
 
 module all()
