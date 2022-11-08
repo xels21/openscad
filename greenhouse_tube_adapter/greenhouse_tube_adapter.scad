@@ -3,20 +3,20 @@ res = 128;
 valve_inner_d = 7;
 valve_max_l = 18;
 connector_l = 3;
-out_tol = -0.2;
+out_tol = -0.5;
 out_outer_d_raw = 4.5;
 out_outer_d = out_outer_d_raw - out_tol;
 out_outer_r = out_outer_d / 2;
 
 out_max_l = 10.5;
 
-valve_tol = 0;
+valve_tol = -0.7;
 valve_outer_d_raw = 11;
 valve_outer_d = valve_outer_d_raw - valve_tol;
 valve_outer_r = valve_outer_d / 2;
 
 max_l = valve_max_l + connector_l + out_max_l;
-thickness = 2;
+thickness = 3;
 
 // all_2d();
 all();
@@ -61,6 +61,7 @@ module valve_tube_2d()
 {
     inner_r = valve_inner_d / 2;
     connector_l = 7;
+    connector_l_expand = 3;
     connector_d_raw = 12;
     connector_d = connector_d_raw - valve_tol;
     connector_r = connector_d / 2;
@@ -69,6 +70,7 @@ module valve_tube_2d()
         [ 0, valve_outer_r ],
         [ valve_max_l - connector_l, valve_outer_r ],
         [ valve_max_l - connector_l, connector_r ],
+        [ valve_max_l - connector_l+connector_l_expand, connector_r ],
         [ valve_max_l, inner_r ],
         [ valve_max_l, 0 ],
     ]);
