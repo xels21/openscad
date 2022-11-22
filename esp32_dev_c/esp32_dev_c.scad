@@ -1,8 +1,12 @@
 use <../libs/openscad_xels_lib/round.scad>;
 
 
-w=28;
-l=55;
+w_raw=28;
+l_raw=55;
+
+w=w_raw+0.2;
+l=l_raw+0.5;
+
 lower_h=2;
 upper_h=4;
 
@@ -12,7 +16,7 @@ h_sum = lower_h+upper_h;
 usb_w=10;
 
 side_w=3;
-v_side_offset=3;
+v_side_offset=2.5;
 
 v_w=18;
 v_h=5;
