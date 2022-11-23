@@ -4,16 +4,16 @@ use <../libs/openscad_xels_lib/round.scad>;
 w_raw=28;
 l_raw=55;
 
-w=w_raw+0.2;
-l=l_raw+0.5;
+w=w_raw+0.5;
+l=l_raw+0.8;
 
 lower_h=2;
-upper_h=5;
+upper_h=3.5;
 
 h_sum = lower_h+upper_h;
 
 
-usb_w=10;
+usb_w=13;
 
 side_w=3;
 v_side_offset=2;
@@ -24,7 +24,7 @@ v_h=5;
 
 thickness=3;
 
-tol=0.04;
+tol=0.05;
 
 outer_w=w +2*thickness;
 outer_l=l +2*thickness;
@@ -52,6 +52,7 @@ module case_bottom(){
 
             
         }
+        // translate([0,0,-upper_h/2])
         usb();
         
         if (1){
@@ -97,7 +98,7 @@ module side(converter=1){
 
 
 module extrea_pins(){
-    translate([l/2-v_h/2,0,0])
+    translate([l/2-v_h/2-1,0,0])
     rounded_cube_z([v_h,v_w,2*(upper_h+lower_h+thickness)], r=v_h*0.49, center=true);
     // cube([v_h,v_w,2*(upper_h+lower_h+thickness)],center=true);
 }
@@ -105,8 +106,9 @@ module extrea_pins(){
 module usb(reverse=false){
     r=1.5;
     r_mov = reverse?-r:r;
-    translate([(l+thickness)/2,0,upper_h/2+r_mov/2])
-    rounded_cube_y([thickness,usb_w,upper_h+r], r=r, center=true);
+    usb_h=6;
+    translate([(l+thickness)/2,0,usb_h/2+r_mov/2])
+    rounded_cube_y([thickness*2,usb_w,usb_h+r], r=r, center=true);
     // cube([thickness,usb_w,upper_h],center=true);
 }
 
