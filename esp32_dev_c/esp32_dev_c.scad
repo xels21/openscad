@@ -8,7 +8,7 @@ w=w_raw+0.2;
 l=l_raw+0.5;
 
 lower_h=2;
-upper_h=4;
+upper_h=5;
 
 h_sum = lower_h+upper_h;
 
@@ -16,15 +16,15 @@ h_sum = lower_h+upper_h;
 usb_w=10;
 
 side_w=3;
-v_side_offset=2.5;
+v_side_offset=2;
 
 v_w=18;
 v_h=5;
 
 
-thickness=2;
+thickness=3;
 
-tol=0.05;
+tol=0.04;
 
 outer_w=w +2*thickness;
 outer_l=l +2*thickness;
@@ -43,8 +43,10 @@ module case_bottom(){
             translate([0,0,-lower_h/2])
             difference(){
                 translate([0,0,-thickness/2])
-                cube([l+2*thickness,w+2*thickness,lower_h+thickness],center=true);
+                rounded_cube_z([l+2*thickness,w+2*thickness,lower_h+thickness],r=thickness/2,center=true);
+                // cube([l+2*thickness,w+2*thickness,lower_h+thickness],center=true);
                 cube([l,w,lower_h],center=true);
+
             }
             connector(tol);
 
@@ -68,8 +70,10 @@ module case_top(){
         translate([0,0,upper_h/2])
         difference(){
             translate([0,0,thickness/2])
-            cube([l+2*thickness,w+2*thickness,upper_h+thickness],center=true);
+            rounded_cube_z([l+2*thickness,w+2*thickness,upper_h+thickness],r=thickness/2, center=true);
+            // cube([l+2*thickness,w+2*thickness,upper_h+thickness],center=true);
             cube([l,w,upper_h],center=true);
+
         }
         connector(-tol);
         usb(reverse=true);
@@ -109,7 +113,8 @@ module usb(reverse=false){
 module connector(tol){
     translate([0,0,upper_h/2])
     difference(){
-        cube([l+thickness-tol*2,w+thickness-tol*2,upper_h],center=true);
+        rounded_cube_z([l+thickness-tol*2,w+thickness-tol*2,upper_h],r=thickness/2,center=true);
+        // cube([l+thickness-tol*2,w+thickness-tol*2,upper_h],center=true);
         cube([l,w,upper_h],center=true);
     }
 }
