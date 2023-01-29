@@ -23,16 +23,16 @@ arduino_outer_w=arduino_w +2*arduino_thickness;
 arduino_outer_l=arduino_l +2*arduino_thickness;
 arduino_outer_h=h_sum     +2*arduino_thickness;
 
-arduino_case_bottom();
+// arduino_case_bottom();
 
-translate([0,arduino_w+arduino_thickness*3,arduino_upper_h-arduino_lower_h])
-rotate([180,0,0])
-arduino_case_top();
+// translate([0,arduino_w+arduino_thickness*3,arduino_upper_h-arduino_lower_h])
+// rotate([180,0,0])
+// arduino_case_top();
 
 PIN_TOP=1;
 PIN_EXTRA_TOP=0;
 
-module arduino_case_bottom(){
+module arduino_case_bottom(PIN_TOP){
     difference(){
         union(){
             translate([0,0,-arduino_lower_h/2])

@@ -54,21 +54,22 @@ with_top_stamp=true;
 arduino_rad_fac = 0.78;
 
 
-use <..\arduino_nano_case\arduino_nano_case.scad>;
+// use <..\arduino_nano_case\arduino_nano_case.scad>;
 include <..\arduino_nano_case\arduino_nano_case.scad>;
 
-// main();
+main();
 
 // translate([0,0,h_complete-top_stamp_h1-top_stamp_h2])
 // top_stamp_r_off(tol=0);
 
-rotate([180,0,0])
-intersection(){
-    top_stamp_r_off();
-    translate([-inner_r*2,-inner_r*2,0.6])
-    cube([inner_r*4,inner_r*4,inner_r*4]);
-    // puzzle();
-}
+
+// rotate([180,0,0])
+// intersection(){
+    // top_stamp_r_off();
+    // translate([-inner_r*2,-inner_r*2,0.6])
+    // cube([inner_ r*4,inner_r*4,inner_r*4]);
+   // // puzzle();
+// }
 
 module main(){
 intersection(){
