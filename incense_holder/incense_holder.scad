@@ -2,16 +2,16 @@ use <../libs/openscad_xels_lib/simple_models.scad>;
 
 t=3;
 
-upper_r=70;
-lower_r=40;
+upper_r=99.9/2;
+lower_r=33.3;
 deg=66.6;
-height=50;
+height=40;
 
 l_count=128;
 circle_fn=9;
 
 stick_d=2;
-stick_h=30;
+stick_h=22.2;
 stick_lower_d=30;
 stick_upper_d=15;
 
@@ -23,13 +23,13 @@ module stick_holder(){
   translate([0,0,t])
   difference(){
     union(){
-     cylinder(d1=stick_lower_d, d2=stick_upper_d, h=stick_h-(stick_upper_d/2), $fn=64);
+     cylinder(d1=stick_lower_d, d2=stick_upper_d, h=stick_h-(stick_upper_d/2), $fn=9);
      translate([0,0,stick_h-(stick_upper_d/2)])
-     sphere(r = stick_upper_d/2, $fn=64);
+     sphere(r = stick_upper_d/2, $fn=9);
 
     }
     translate([0,0,stick_h])
-    sphere(r = stick_upper_d/4, $fn=8);
+    sphere(r = stick_upper_d/5, $fn=9);
 
     cylinder(h = stick_h, d = stick_d, $fn=32);
   }
