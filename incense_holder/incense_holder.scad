@@ -22,14 +22,10 @@ stick_holder();
 module stick_holder(){
   translate([0,0,t])
   difference(){
-    union(){
-     cylinder(d1=stick_lower_d, d2=stick_upper_d, h=stick_h-(stick_upper_d/2), $fn=9);
-     translate([0,0,stick_h-(stick_upper_d/2)])
-     sphere(r = stick_upper_d/2, $fn=9);
+    twisted_cylinder(r1=stick_lower_d/2, r2=stick_upper_d/2, h=stick_h, layers=64, fn=circle_fn, deg=-360/circle_fn);
 
-    }
-    translate([0,0,stick_h])
-    sphere(r = stick_upper_d/5, $fn=9);
+    translate([0,0,stick_h-5])
+    cylinder(d1=stick_d,d2=stick_upper_d,h=5,$fn=9);
 
     cylinder(h = stick_h, d = stick_d, $fn=32);
   }
@@ -38,8 +34,8 @@ module stick_holder(){
 
 module bowl(){
   difference(){
-    twisted_circle(start_r=lower_r, end_r=upper_r, h=height, layers=l_count, fn=circle_fn, deg=deg);
+    twisted_cylinder(r1=lower_r, r2=upper_r, h=height, layers=l_count, fn=circle_fn, deg=deg);
     translate([0,0,t])
-    twisted_circle(start_r=lower_r-t, end_r=upper_r-t, h=height-t, layers=l_count, fn=circle_fn, deg=deg);
+    twisted_cylinder(r1=lower_r-t, r2=upper_r-t, h=height-t, layers=l_count, fn=circle_fn, deg=deg);
   }
 }
