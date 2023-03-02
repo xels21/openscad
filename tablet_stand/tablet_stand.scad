@@ -12,29 +12,29 @@ use <../libs/Round-Anything/MinkowskiRound.scad>;
 
 */
 
-bottom_t = 5;
-front_t = 10;
+bottom_t = 7;
+front_t = 12;
 
-inner_cutaway_d = 4;
-inner_cutaway_h = 8;
+inner_cutaway_d = 5;
+inner_cutaway_h = 16;
 
 front_d=front_t+inner_cutaway_d;
 
-inner_width=10;
+inner_width=14;
 
-inner_bottom_plus =5;
+inner_bottom_plus =6;
 
-length_extension = 50;
-extrude = 50;
+length_extension = 60;
+extrude = 60;
 
 smaller_fac = 0.3;
 
-stand_deg = 0.7;
+stand_deg = 0.65;
 
 max_height = bottom_t + inner_bottom_plus+inner_cutaway_h;
 max_l = front_d+inner_width+length_extension;
 
-rad = 3;
+rad = 5;
 
 all();
 module all(){
