@@ -16,7 +16,7 @@ t=4;
 difference(){
   translate([0,0,-t])
   difference(){
-    rounded_cube([card_w+2*t,card_d+2*t,card_h+2*t], t, fn=20);
+    rounded_cube([card_w+2*t,card_d+2*t,card_h+2*t], t, fn=64);
     cube([card_w+2*t,card_d+2*t,t]);
   }
 
