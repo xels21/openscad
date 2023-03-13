@@ -8,23 +8,23 @@
 |_>       <_|
 */
 
-inner_d=38.3;
+inner_d=39;
 lense_d=33;
 lense_off=8;
 
 inner_r=inner_d/2;
 lense_r=lense_d/2;
 
-t=1;
+t=1.5;
 
-h=20;
+h=15;
 
 h_max=h+lense_r+t;
 x_max=2*t+inner_d;
 
-span_r=0.4;
+span_r=0.2;
 
-res=128;
+res=256;
 
 
 rotate_extrude($fn=res) {
