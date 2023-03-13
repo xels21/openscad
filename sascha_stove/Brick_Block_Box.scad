@@ -1,4 +1,4 @@
-module Brick_Block_Box(Block_Size=60){
+module Brick_Block_Box(Block_Size=60, Chamfer_Size=2){
 
 // Overall width and length of block
 Block_Size = Block_Size; //[12:0.25:100]
@@ -7,7 +7,7 @@ Block_Size = Block_Size; //[12:0.25:100]
 Layers = 3; //[1:1:12]
 
 // Size of the chamfer between bricks
-Chamfer_Size = 2; //[0.25:0.25:8]
+Chamfer_Size = Chamfer_Size; //[0.25:0.25:8]
 
 // Determines the brick height
 Pixel_Ratio = 3;  //[3:"3D Mario", 4:"Classic Mario"]
