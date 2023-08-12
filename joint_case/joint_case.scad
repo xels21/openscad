@@ -1,4 +1,6 @@
 use <../libs/openscad_xels_lib/round.scad>;
+use <../libs/openscad_xels_lib/helper.scad>;
+use <../libs/Round-Anything/MinkowskiRound.scad>;
 
 h=105;
 d1=8.5;
@@ -20,7 +22,7 @@ capH2=4;
 capW=0.35;
 capStepH=0.4;
 
-tol=0.04;
+tol=0.05;
 
 printHelper=false;
 
@@ -31,17 +33,30 @@ dual_rot=1.2;
 // translate([0,0,h])rotate([180,0,0])case();
 // translate([d2*1.6,0,capH+thickness])rotate([180,0,0])cap();
 
-translate([0,d2*1.4,thickness])
+// translate([0,d2*1.4,thickness])
 // cap();
 // case();
+
 // dual_cap();
-dual_case();
+// dual_case();
+
+// case_out_norm();
+// n_case_out();
+// n_case_in();
+n_case();
+translate([0,50,0])
+n_cap();
 
 // difference(){
 //   dual_case();
 //   translate([0,0,100])
 //   cube([50,50,50],center=true);
 // }
+n_rot_fac = .32;
+
+
+
+
 
 
 module print_helper(){
@@ -52,6 +67,115 @@ module print_helper(){
 }
 
 
+module n_cap_in(n=6){
+  scale([1+tol*0.5,1+tol*0.5,1])
+  translate([0,0,thickness])
+  n_case_out(n);
+}
+
+module n_cap(n=6){
+  // translate([0,0,capH])
+  // rotate([180,0,0])
+  difference(){
+    n_cap_out(n);
+    n_cap_in(n);
+    translate([0,0,thickness])
+    linear_extrude(height = capH+thickness)
+    rotate([0,0,360/n*0.5])
+    circle(d=capR*5.5,$fn=n);
+  }
+}
+
+
+module n_cap_out(n=6) {
+  // cap_out();
+  // for (i=[0:n-1]) {
+  //   translate([sin(i*360/n)*(capR*1.7+thickness)
+  //             ,cos(i*360/n)*(capR*1.7+thickness)
+  //             ,0])
+  //   cap_out();
+  // }
+
+  // linear_extrude(height = capH+thickness)
+  // rotate([0,0,360/n*0.5])
+  // scale(2)
+  // offset([4,4,1])
+  // offset([1/4,1/4,1])
+  // scale(0.5)
+  // circle(d=capR*5.5,$fn=n);
+  
+  difference(){
+    minkowskiOutsideRound(2.6)
+    cylinder(d=capR*7.5,h=capH+thickness,$fn=n);
+    scale([capR*5.5,capR*5.5,-.4])
+    rotate([0,180,45])
+    linear_extrude(1)
+    translate([-.4,-.5,0])
+    twenty_one();
+  }
+
+}
+module case_in_norm(){
+  translate([0,0,h]) 
+  rotate([180,0,0])
+  case_in();
+}
+
+
+module n_case(n=6){
+  difference(){
+    n_case_out();
+    n_case_in();
+  }
+}
+
+module case_out_norm(){
+  translate([0,0,h]) 
+  rotate([180,0,0])
+  case_out();
+}
+
+module n_case_out(n=6) {
+  difference(){
+  translate([0,0,-0.3])
+  union(){
+    case_out_norm();
+    for (i=[0:n-1]) {
+      translate([sin(i*360/n)*(capR*1.9)
+                ,cos(i*360/n)*(capR*1.9)
+                ,0])
+      rotate([cos(i*360/n)*capR*n_rot_fac
+            ,sin(i*360/n)*-capR*n_rot_fac
+            ,0])
+      case_out_norm();
+    }
+  }
+  translate([-100,-100,-200])
+  cube([200,200,200]);
+  }
+}
+module n_case_in(n=6) {
+  difference() {
+    translate([0,0,-0.3])
+    union(){
+    case_in_norm();
+      for (i=[0:n-1]) {
+      translate([sin(i*360/n)*(capR*1.9)
+                ,cos(i*360/n)*(capR*1.9)
+                ,0])
+      rotate([cos(i*360/n)*capR*n_rot_fac
+             ,sin(i*360/n)*-capR*n_rot_fac
+             ,0])
+      case_in_norm();
+    }
+  }
+  translate([-100,-100,-200])
+  cube([200,200,200]);
+  }
+}
+
+
+
 module dual_cap(){
   x_diff_corr=0.6;
 difference(){
@@ -59,7 +183,7 @@ difference(){
       translate([-d1*1.8/2,-d1,-thickness])
       rounded_cube_y([d1*1.8,d1*2,capH+thickness], r=2, center=false);
 
-      translate([-dual_x_dif-thickness-x_diff_corr,0,-thickness])
+      translate([-(dual_x_dif+thickness+x_diff_corr),0,-thickness])
       cap_out();
 
       translate([dual_x_dif+thickness+x_diff_corr,0,-thickness])
@@ -76,7 +200,7 @@ difference(){
 
     translate([-dual_x_dif,0,h])
     rotate([180,dual_rot,0])
-    scale([1+tol,1+tol,1])
+    scale([1+tol,1+tol,1]) 
     case_out();
   }
 }
