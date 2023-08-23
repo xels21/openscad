@@ -28,6 +28,10 @@ uc_y_plus = uc_y-2*uc_z_offset;
 
 uc_z_max=uc_z + usbc_z;
 
+uc_pins_x=5;
+uc_pins_z=1;
+
+
 thickness = 1.5;
 
 x_max = uc_x+thickness;
@@ -35,8 +39,8 @@ x_max = uc_x+thickness;
 y_max = uc_y + 2*thickness;
 z_max = uc_z_max + 2*thickness;
 
-scale_off=1.07;
-scale_off_translate_cor=-0.5;
+scale_off=1.04;
+scale_off_translate_cor=-0.4;
 
 difference(){
   cube([x_max,y_max,z_max]);
@@ -44,6 +48,10 @@ difference(){
   translate([usbc_x_over,thickness+scale_off_translate_cor,thickness])
   scale([scale_off,scale_off,scale_off]) 
   usb_c();
+
+  //uc pins
+  translate([x_max-uc_pins_x,(uc_y-uc_y_plus)/2+thickness,thickness-uc_pins_z])
+  cube([uc_pins_x,uc_y_plus,uc_pins_z]);
 }
 
 module usb_c(){
