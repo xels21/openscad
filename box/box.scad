@@ -1,9 +1,17 @@
 use <../libs/openscad_xels_lib/round.scad>;
 use <..\libs\MCAD\boxes.scad>
 
-box_plus_lid();
+box_for_step_down_converter();
 
-module box_plus_lid(x = 40, y = 18, z = 10, t = 1.3, rad = 1.5, lid_scale_fac = .98, cut_away = 9, $fn = 32)
+module box_for_step_down_converter(){
+    box_plus_lid(x = 55, y = 21, z = 14, t = 1.3, rad = 1.5, cut_away = 8, $fn = 32);
+}
+
+module box_for_step_up_converter(){
+    box_plus_lid(x = 40, y = 18, z = 10, cut_away = 9);
+}
+
+module box_plus_lid(x = 40, y = 18, z = 10, t = 1.3, rad = 1.5, lid_scale_fac = .97, cut_away = 9, $fn = 32)
 {
     box(x, y, z, t, rad, cut_away);
     translate([ 0, y * 1.5 ]) scale(lid_scale_fac) lid(x + t, y + 2 * t, t);
