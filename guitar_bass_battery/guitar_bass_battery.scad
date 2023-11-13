@@ -35,18 +35,18 @@ battery_z_wo_pin = 45;
 
 hole_x_raw = 29;
 hole_y_raw = 21.3;
-hole_x = hole_x_raw - 0.3;
-hole_y = hole_y_raw - 0.3;
+hole_x = hole_x_raw - 0.5;
+hole_y = hole_y_raw - 0.1;
 hole_z_wo_top=battery_z_wo_pin + thickness;
 
 pin_off_x=4;
-pin_off_y=6;
-pin_rad=3;
+pin_off_y=6.5;
+pin_rad=4;
 
-top_plus=1;
-top_z=2;
+top_plus=1.7;
+top_z=2.5;
 
-top_cut_y=6;
+top_cut_y=9;
 
 back_cut_off=8;
 
@@ -72,26 +72,41 @@ module all(){
     battery_wo_pin();
     //pins
     #translate([pin_off_x,-pin_rad,0])
-    rounded_cube_z([hole_x-2*pin_off_x,hole_y-pin_off_y+pin_rad,thickness]);
+    rounded_cube_z([hole_x-2*pin_off_x,hole_y-pin_off_y+pin_rad,thickness], r=pin_rad);
     //minus sign
-    #translate([hole_x-8,hole_y-3,0])
-    cube([4,0.5,0.3]);
+    #translate([hole_x-8,hole_y-4,0])
+    rounded_cube_z([4,1,thickness], r=0.49);
   }
 }
 
 module top(){
+  top_gap_rad=top_plus*0.5;
+
+  translate([(hole_x+2*top_plus)-top_plus-2,((hole_y+2*top_plus)-top_cut_y)/2,]) 
+  {
+    rounded_cube_xyz([top_plus+2+1,top_cut_y, top_z],r=top_gap_rad);
+    rounded_cube_z([top_plus+2+1,top_cut_y, top_gap_rad],r=top_gap_rad);
+  }
+
   translate([0,0,-top_z])
   difference() {
     rounded_cube_xy([hole_x+2*top_plus,hole_y+2*top_plus, 2*top_z], r=top_z*0.999, fn=.1, center=false);
     cube([hole_x+2*top_plus,hole_y+2*top_plus, top_z]);
-    translate([(hole_x+2*top_plus)-top_plus,((hole_y+2*top_plus)-top_cut_y)/2,top_z]) 
-    #cube([top_plus,top_cut_y, top_z]);
   }
 }
 
 module hole_wo_top(){
+  support_h=28;
   cube([hole_x, hole_y, hole_z_wo_top]);
-
+  translate([hole_x,(hole_y-top_cut_y)/2,hole_z_wo_top-support_h]) 
+  mirror([0,1,0]) 
+  rotate([90,0,0])
+  linear_extrude(height = top_cut_y) 
+  polygon(points = [
+    [0,0],
+    [0,support_h],
+    [top_plus/2,support_h],
+  ]);
 }
 
 module battery_wo_pin(){
