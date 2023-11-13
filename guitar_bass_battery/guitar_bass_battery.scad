@@ -35,7 +35,7 @@ battery_z_wo_pin = 45;
 
 hole_x_raw = 29;
 hole_y_raw = 21.3;
-hole_x = hole_x_raw - 0.5;
+hole_x = hole_x_raw - 0.8;
 hole_y = hole_y_raw - 0.1;
 hole_z_wo_top=battery_z_wo_pin + thickness;
 
@@ -74,8 +74,8 @@ module all(){
     #translate([pin_off_x,-pin_rad,0])
     rounded_cube_z([hole_x-2*pin_off_x,hole_y-pin_off_y+pin_rad,thickness], r=pin_rad);
     //minus sign
-    #translate([hole_x-8,hole_y-4,0])
-    rounded_cube_z([4,1,thickness], r=0.49);
+    translate([hole_x-8,hole_y-4,0])
+    #rounded_cube_z([4,1,thickness/2], r=0.49);
   }
 }
 
@@ -96,7 +96,7 @@ module top(){
 }
 
 module hole_wo_top(){
-  support_h=28;
+  support_h=24;
   cube([hole_x, hole_y, hole_z_wo_top]);
   translate([hole_x,(hole_y-top_cut_y)/2,hole_z_wo_top-support_h]) 
   mirror([0,1,0]) 
