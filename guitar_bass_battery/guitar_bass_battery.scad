@@ -35,7 +35,7 @@ battery_z_wo_pin = 45;
 
 hole_x_raw = 29;
 hole_y_raw = 21.3;
-hole_x = hole_x_raw - 0.8;
+hole_x = hole_x_raw - 0.65;
 hole_y = hole_y_raw - 0.1;
 hole_z_wo_top=battery_z_wo_pin + thickness;
 
