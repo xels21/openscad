@@ -3,10 +3,10 @@ use <../libs/Round-Anything/MinkowskiRound.scad>;
 res=64;
 
 height      = 29.5;
-thick       = 4;
+thick       = 5;
 // z           = 15;
-top_l       = 20;
-bottom_l    = 30;
+top_l       = 25;
+bottom_l    = 35;
 tri_r       = 6;
 led_w_raw   = 10;
 led_h_raw   = 2.6;
@@ -35,7 +35,7 @@ bear_h_raw=7;
 bear_h=bear_h_raw+1;
 bear_hole=7.5;//M8
 
-z = thick+bear_h+thick;
+z = 50;
 
 // with_connector = true;
 // with_connector = false;
@@ -47,12 +47,15 @@ max_y = thick + height + thick;
 
 
 
+v2(with_connector=false);
 
-v2(with_connector=true);
 
-translate([0,-10,0])
-rotate([90,0,0])
-v2_conn_bear();
+// z = thick+bear_h+thick;
+// v2(with_connector=true);
+
+// translate([0,-10,0])
+// rotate([90,0,0])
+// v2_conn_bear();
 
 module v2_conn_bear(){
     translate([+conn_x+conn_thick,0,0])
@@ -136,24 +139,25 @@ module v2_raw(with_connector=false){
 //END CABLE
 
 //START LED
+led_y_plus = 3;
 translate([0,thick + cable_h + thick + cable_h_gap,0])
     linear_extrude(height = z) 
     polygon(points=
     [
         [ 0                     , -4                    ],
         [ min_x                 , 0                     ],
-        [ min_x                 , thick                 ],
+        [ min_x                 , led_y_plus                 ],
         // [ -(led_w + thick)      , thick                 ],
-        [ -(led_w + thick)      , thick + led_h + thick ],
-        [ -(led_w - led_w * .3) , thick + led_h + thick ],
-        [ -(led_w - led_w * .3) , thick + led_h         ],
-        [ -(led_w)              , thick + led_h         ],
-        [ -(led_w)              , thick                 ],
-        [ 0                     , thick                 ],
-        [ 0                     , thick + led_h         ],
-        [ -0.8                  , thick + led_h         ],
-        [ -0.8                  , thick + led_h + thick ],
-        [ 0                     , thick + led_h + thick ],
+        [ -(led_w + thick)      , led_y_plus + led_h + led_y_plus ],
+        [ -(led_w - led_w * .3) , led_y_plus + led_h + led_y_plus ],
+        [ -(led_w - led_w * .3) , led_y_plus + led_h         ],
+        [ -(led_w)              , led_y_plus + led_h         ],
+        [ -(led_w)              , led_y_plus                 ],
+        [ 0                     , led_y_plus                 ],
+        [ 0                     , led_y_plus + led_h         ],
+        [ -0.8                  , led_y_plus + led_h         ],
+        [ -0.8                  , led_y_plus + led_h + led_y_plus ],
+        [ 0                     , led_y_plus + led_h + led_y_plus ],
     ]);
 //END LED
 
