@@ -47,7 +47,7 @@ max_y = thick + height + thick;
 
 
 
-v2(with_connector=false);
+v2(with_connector=false, rounded=true);
 
 
 // z = thick+bear_h+thick;
@@ -92,10 +92,14 @@ module connector(){
     ]);
 }
 
-module v2(with_connector=false){
+module v2(with_connector=false, rounded=true){
     difference(){
-    minkowskiRound((thick-1)/2)
-    v2_raw(with_connector);
+    if(rounded){
+        minkowskiRound((thick-1)/2)
+        v2_raw(with_connector);
+    }else{
+        v2_raw(with_connector);
+    }
         if(with_connector){
             scale([conn_tol,conn_tol,1])
             translate([min_x+conn_h,conn_tol*0.07,0])
@@ -139,7 +143,7 @@ module v2_raw(with_connector=false){
 //END CABLE
 
 //START LED
-led_y_plus = 3;
+led_y_plus = 4;
 translate([0,thick + cable_h + thick + cable_h_gap,0])
     linear_extrude(height = z) 
     polygon(points=
