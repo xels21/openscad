@@ -1,0 +1,1 @@
+Getriebe Bibliothek für OpenSCAD / Gears Library for OpenSCAD by janssen86 on Thingiverse: https://www.thingiverse.com/thing:1604369
