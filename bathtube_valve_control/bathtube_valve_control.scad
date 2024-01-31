@@ -69,8 +69,8 @@ module other_with_connector(){
 
 module big_gear_with_connector(){
   difference(){
-    big_gear(big_gear_h=big_gear_h-.3);
-    connector(tol=0.3,length=big_gear_h);
+    big_gear(big_gear_h=big_gear_h-.6);
+    connector(tol=0.6,length=big_gear_h);
   }
 }
 
