@@ -17,6 +17,8 @@ screw_r_t=2;
 screw_r_off=1.5;
 screw_h=2.5;
 
+side_corr=0; //needs to be ckecked
+
 ikea_inner_w=456;
 
 res=32;
@@ -38,20 +40,26 @@ echo(upper_l);
 side_l=side_l_raw/2-side_corr-plexi_holder_t;
 echo(side_l);
 
-offset=10;
-
 
 // gen_holder(292/2, plexi_holder_inner_h_off=0);
 // gen_holder(208, plexi_holder_inner_h_off=0);
-door_upper();
+// door_upper();
 // door_bottom();
-// bottom();
-// upper();
-// side_upper_right();
-// side_upper_left();
-// side_botom_left();
-// side_botom_right();
-
+side_all();
+module side_all(){
+translate([-220,60,0])
+bottom();
+translate([0,60,0])
+upper();
+side_upper_right();
+translate([-10,0,0])
+side_upper_left();
+translate([0,40,0]){
+  side_botom_left();
+  translate([-10,0,0])
+  side_botom_right();
+}
+}
 
 module door_upper(){
   gen_holder(w=side_l_raw/2, plexi_holder_inner_h_off=0);
