@@ -28,10 +28,12 @@ variety_name = "Variety Name";
 botanical_name = "Botanical name";
 
 /* [Tag Parameters] */
+// Specify what to generate.
+generate = "all"; //["all", "base" ,"border" ,"label"]
 // Specify the tag width (mm).
 tag_width = 80; // [20:1:120]
 // Specify the tag height (the rectanglular part) (mm).
-tag_height = 20; // [6.0:1:60.0]
+tag_height = 23; // [6.0:1:60.0]
 // Specify the tag thickness (mm).
 tag_thickness = 1.0; // [0.6:0.01:5]
 // Specify the length of the tag stake (mm).
@@ -39,12 +41,13 @@ stake_length = 40; // [10:100]
 // Specify the width of the tag stake (mm).
 stake_width = 5; // [2:30]
 // Specify the label thickness (mm).
-label_thickness = 0.6; // [0.2:0.01:3]
-// Add a border around the label?
-border = "no"; // [yes,no]
+label_thickness = 0.5; // [0.2:0.01:3]
+// border_thickness
+border_thickness = 1.5; // [0.2:0.1:3]
+// rounding
+round_radius = 2; // [0:0.1:10]
 // Reinforce the stick with a ridge down the center the same height as the text?
-reinforce = "no"; // [yes,no]
-
+reinforce = "yes"; // [yes,no]
 
 /* [Basic Font Parameters] */
 // Some suitable fonts with italic styles
@@ -92,10 +95,12 @@ variety_name_spacing = 1; // [0.5:0.01:2]
 // If the spacing between the letters needs to be adjusted, specify the value. A value of 1 is normal spacing for the font. A larger value increases the spacing and a smaller value decreases the spacing.
 botanical_name_spacing = 1; // [0.5:0.01:2]
 
+
 /* [Hidden] */
 $fn=50;
-fudge = 0.01;
-round_radius = 2;
+fudge = .01;
+reinforce_connector = 4.5;
+
 
 // This convoluted way of selecting the font from an array was a requirement introduced by a change
 // on the Thingiverse customizer that broke the ability to directly select fonts with a style specified.
@@ -139,59 +144,95 @@ botanicalNameYloc = (tag_height/totalNameSpace) * 1.0 * botanicalNameSpace/2;
 echo (commonNameSpace, varietyNameSpace, botanicalNameSpace, totalNameSpace, commonNameYloc, varietyNameYloc, botanicalNameYloc);
 
 // Set the stick coordinates
-s_off = 1;                    // stick offset (to make fillet)
+s_off = 2;                    // stick offset (to make fillet)
 s_top = stake_width/2 + 4.5 + s_off;            // half of stick top width
 s_mid = stake_width/2 + 2.5 + s_off;            // half of stick middle width
 s_bot = stake_width/2 + s_off;          // half of stick bottom width
 s_len = stake_length - 4.25;  // stick length
 
-tag_points = [ [-s_top,0], [-s_top,s_off*2+2], [s_top,s_off*2+2], [s_top,0], [s_mid,0], [s_bot,-4], [s_bot,-s_len], [0,-s_len-5], [-s_bot,-s_len], [-s_bot,-4], [-s_mid,0] ];
+tag_points = [ [-s_top,0], [-s_top,s_off*2+border_thickness], [s_top,s_off*2+border_thickness], [s_top,0], [s_mid,0], [s_bot,-4], [s_bot,-s_len], [0,-s_len-5], [-s_bot,-s_len], [-s_bot,-4], [-s_mid,0] ];
 tag_paths = [ [0,1,2,3,4,5,6,7,8,9,10] ];
 
 
-{
-  // Create the stick
-  color("OliveDrab") translate([0,-s_off,0]) linear_extrude(tag_thickness) offset(r=-s_off) polygon(tag_points,tag_paths,1);
-  // Create the reinforcing wall on the stick
-  if (reinforce == "yes") {
-    color("Red") translate([0,0,tag_thickness-fudge]) union() {
-      intersection() { 
-        translate([-1.25,-stake_length,0]) cube([2.5,(border == "yes") ? stake_length: s_len,label_thickness]);
-        translate([0,-s_off,0]) linear_extrude(label_thickness) offset(r=-s_off) polygon(tag_points,tag_paths,1);
-      }
-      if (border == "yes") {
-        translate([0,-1.8,0]) linear_extrude(label_thickness) rotate([0,0,-90]) circle (4.5, $fn=3);
-      }
-    }
-  }
-  // Create the label area
-  color("OliveDrab") translate([-tag_width/2+round_radius,round_radius,0]) minkowski()
-  {
-    cube([tag_width-2*round_radius,tag_height-2*round_radius,tag_thickness/2]);
-    cylinder(r=round_radius,h=tag_thickness/2);
-  }
-  // Create the border around the label area
-  if (border == "yes") {
-    translate([0,0,tag_thickness-fudge]) color("Red") difference() {
+if(generate=="all"){
+  base();
+  border();
+  label();
+}
+if(generate=="base"){base();}
+if(generate=="border"){border();}
+if(generate=="label"){label();}
+
+
+module base(){
+  color("black") difference(){
+    union() {
+      // Create the stick
+      translate([0,-s_off,0]) linear_extrude(tag_thickness) offset(r=-s_off) polygon(tag_points,tag_paths,1);
+
+      // Create the label area
       translate([-tag_width/2+round_radius,round_radius,0]) minkowski()
       {
-        cube([tag_width-2*round_radius,tag_height-2*round_radius,label_thickness/2]);
-        cylinder(r=round_radius,h=label_thickness/2);
-      }
-      translate([-tag_width/2+round_radius+0.8,round_radius+0.8,-fudge/2]) minkowski()
-      {
-        cube([tag_width-2*round_radius-1.6,tag_height-2*round_radius-1.6,label_thickness/2+fudge*2]);
-        cylinder(r=round_radius,h=label_thickness/2);
+        cube([tag_width-2*round_radius,tag_height-2*round_radius,tag_thickness/2]);
+        cylinder(r=round_radius,h=tag_thickness/2);
       }
     }
+    border(1);
+    label();
+  }
+}
+
+// Create the border around the label area
+module border(plus=0){
+  color("lightblue"){
+    linear_extrude(height = tag_thickness+label_thickness) difference() {
+      translate([-tag_width/2+round_radius-plus/2,round_radius-plus/2]) 
+      minkowski(){
+        square([tag_width-2*round_radius+plus,tag_height-2*round_radius+plus]);
+        circle(r=round_radius);
+      }
+
+      translate([-tag_width/2+round_radius+(border_thickness/2),round_radius+(border_thickness/2)]) minkowski(){
+        square([tag_width-2*round_radius-border_thickness,tag_height-2*round_radius-border_thickness]);
+        circle(r=round_radius);
+      }
+    }
+    if (reinforce == "yes") {border_reinforce();}
+  }
+}
+
+// Create the reinforcing wall on the stick
+module border_reinforce(){
+  union() {
+    intersection() { 
+      translate([-1.25,-stake_length,0]) cube([2.5, stake_length,tag_thickness + label_thickness]);
+      translate([0,-s_off,0]) linear_extrude(tag_thickness + label_thickness) offset(r=-s_off) polygon(tag_points,tag_paths,1);
+    }
+    translate([0,-reinforce_connector*.5,0]) linear_extrude(tag_thickness + label_thickness) rotate([0,0,-90]) circle (reinforce_connector, $fn=3);
   }
 }
 
 // Create the text
-translate([0,commonNameYloc+common_name_shift_up,tag_thickness-fudge]) color("red") linear_extrude(label_thickness+fudge) text(common_name, size=common_name_font_size, halign="center", valign="center", font=selectedCommonNameFont, spacing=common_name_spacing);
+module label(){
+  color("white"){
+    label_normal();
+    label_mirrored();
+  }
+}
+module label_normal(){
+  translate([0,0,tag_thickness-fudge])  linear_extrude(label_thickness+fudge)
+  label_2d();
+}
 
-translate([0,varietyNameYloc+variety_name_shift_up,tag_thickness-fudge]) color("red") linear_extrude(label_thickness+fudge) text(variety_name, size=variety_name_font_size, halign="center", valign="center", font=selectedVarietyNameFont, spacing=variety_name_spacing);
+// Create the text
+module label_mirrored(){
+  translate([0,0,0])  linear_extrude(tag_thickness-fudge)
+  mirror([1,0,0])
+  label_2d();
+}
 
-translate([0,botanicalNameYloc+botanical_name_shift_up,tag_thickness-fudge]) color("red") linear_extrude(label_thickness+fudge) text(botanical_name, size=botanical_name_font_size, halign="center", valign="center", font=selectedBotanicalNameFont, spacing=botanical_name_spacing);
-
-
+module label_2d(){
+    translate([0,commonNameYloc+common_name_shift_up]) text(common_name, size=common_name_font_size, halign="center", valign="center", font=selectedCommonNameFont, spacing=common_name_spacing);
+    translate([0,varietyNameYloc+variety_name_shift_up]) text(variety_name, size=variety_name_font_size, halign="center", valign="center", font=selectedVarietyNameFont, spacing=variety_name_spacing);
+    translate([0,botanicalNameYloc+botanical_name_shift_up]) text(botanical_name, size=botanical_name_font_size, halign="center", valign="center", font=selectedBotanicalNameFont, spacing=botanical_name_spacing);
+}
