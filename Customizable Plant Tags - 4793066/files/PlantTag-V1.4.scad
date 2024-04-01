@@ -23,9 +23,13 @@ V1.4 - added a parameter for specifying the stake width, allowed smaller tag wid
 */
 
 /* [Plant Name Parameters] */
-common_name = "Common Name";
-variety_name = "Variety Name";
-botanical_name = "Botanical name";
+// common_name = "Common Name";
+// variety_name = "Variety Name";
+// botanical_name = "Botanical name";
+common_name = "Beetroots";
+variety_name = "Rote Bete";
+botanical_name = "Буряки";
+
 
 /* [Tag Parameters] */
 // Specify what to generate.
@@ -163,6 +167,14 @@ if(generate=="base"){base();}
 if(generate=="border"){border();}
 if(generate=="label"){label();}
 
+position_helper();
+module position_helper(){
+  linear_extrude(height = 0.001) 
+  difference() {
+    square(size = [2*tag_width, 2*(tag_height+stake_length)], center=true);
+    square(size = [2*tag_width-.1, 2*(tag_height+stake_length-.1)], center=true);
+  }
+}
 
 module base(){
   color("black") difference(){
@@ -177,7 +189,7 @@ module base(){
         cylinder(r=round_radius,h=tag_thickness/2);
       }
     }
-    border(1);
+    border();
     label();
   }
 }
@@ -226,7 +238,7 @@ module label_normal(){
 
 // Create the text
 module label_mirrored(){
-  translate([0,0,0])  linear_extrude(tag_thickness-fudge)
+  translate([0,0,0])  linear_extrude(tag_thickness/2)
   mirror([1,0,0])
   label_2d();
 }

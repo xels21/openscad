@@ -1,9 +1,14 @@
 rem unix may be 'generate="base"'
 
-set common_name=111
-set variety_name=222
-set botanical_name=333
+set common_name="Beetroots"
+set variety_name="Rote Bete"
+set botanical_name="Буряки"
 
-start openscad -D "generate=""base""" -D "common_name=""111""" -D "variety_name=""%variety_name%""" -D "botanical_name=""%botanical_name%""" -o plant_base.stl PlantTag-V1.4.scad
-start openscad -D "generate=""border""" -D "common_name=""111""" -D "variety_name=""%variety_name%""" -D "botanical_name=""%botanical_name%""" -o plant_border.stl PlantTag-V1.4.scad
-start openscad -D "generate=""label""" -D "common_name=""111""" -D "variety_name=""%variety_name%""" -D "botanical_name=""%botanical_name%""" -o plant_label.stl PlantTag-V1.4.scad
+@REM openscad -D "generate=""all""" -o plant_all.stl PlantTag-V1.4.scad
+
+openscad -D "generate=""label""" -D "common_name=""%common_name%""" -D "variety_name=""%variety_name%""" -D "botanical_name=""%botanical_name%""" -o plant_label_%common_name%.stl PlantTag-V1.4.scad
+openscad -D "generate=""base""" -D "common_name=""%common_name%""" -D "variety_name=""%variety_name%""" -D "botanical_name=""%botanical_name%""" -o plant_base_%common_name%.stl PlantTag-V1.4.scad
+openscad -D "generate=""border""" -D "common_name=""%common_name%""" -D "variety_name=""%variety_name%""" -D "botanical_name=""%botanical_name%""" -o plant_border_%common_name%.stl PlantTag-V1.4.scad
+
+
+pause
