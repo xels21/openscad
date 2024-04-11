@@ -55,7 +55,9 @@ module all(with_screw=true){
       screw();
     }
   }
+  
   if(with_screw){
+      log("ATTENTION: need to be evened in the slicer to level 0")
       translate(v = [thickness*2,thickness + table_height*.5,0])
       scale(.96)
       screw();
