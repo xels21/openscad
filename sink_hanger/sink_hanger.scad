@@ -23,17 +23,18 @@ use <../libs/Round-Anything/MinkowskiRound.scad>;
 
 
 
-thickness = 3;
-hanger_x = 14;
+thickness = 4;
+hanger_x = 13.5;
 hanger_x_span = 2;
-hanger_y = 26.5;
+hanger_y = 25.5;
 hanger_clip = 2;
 
-hook_hanger_off=30;
+hook_hanger_off=25;
 
-hook_x=18;
-hook_y=12;
-hook_support=4;
+hook_x=15;
+hook_y=14;
+hook_rounding=4;
+hook_secure=3;
 
 z = 6;
 round = 1.5;
@@ -80,14 +81,17 @@ module hook_2d(){
   polygon(points = [
     [0,0],
     [thickness,0],
-    [thickness,-hook_y+hook_support],
-    [thickness+hook_support,-hook_y],
-    [thickness+hook_x-hook_support,-hook_y],
-    [thickness+hook_x,-hook_y+hook_support],
-    [thickness+hook_x,0],
+    [thickness,-hook_y+hook_rounding],
+    [thickness+hook_rounding,-hook_y],
+    [thickness+hook_x-hook_rounding,-hook_y],
+    [thickness+hook_x,-hook_y+hook_rounding],
+    [thickness+hook_x,-hook_secure],
+    [thickness+hook_x-hook_secure,0],
     [thickness+hook_x+thickness,0],
-    [thickness+hook_x+thickness,-hook_y-thickness],
-    [0,-hook_y-thickness],
+    [thickness+hook_x+thickness,-hook_y-thickness+hook_rounding],
+    [thickness+hook_x+thickness-hook_rounding,-hook_y-thickness],
+    [+hook_rounding,-hook_y-thickness],
+    [0,-hook_y-thickness+hook_rounding],
     ]);
 
 }
