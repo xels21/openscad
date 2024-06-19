@@ -1,21 +1,25 @@
 use <../libs/Round-Anything/MinkowskiRound.scad>;
 
-RELEASE = false;
-// RELEASE = true;
+// RELEASE = false;
+RELEASE = true;
 
-d=68;
+d=68.5;
 teeth_count = 12;
-teeth_d = 6;
-teeth_h = 1.5;
+teeth_d = 6.2;
+teeth_h = 1.2;
 
-d_thickness = RELEASE ? 15 : 5;
-handle_w = 30;
-handle_l = 70;
+// d_thickness = RELEASE ? 15 : 5;
+d_thickness = 10;
+d_sum = d + 2*d_thickness;
+handle_w = 25;
+handle_l_out = 30;
+handle_l = d+2*handle_l_out;
 
-rounding = 2;
 extrude = RELEASE ? 10 : 1;
+rounding = extrude*.4;
 
-$fn=64;
+$fn=RELEASE ? 64 : 20;
+// res = RELEASE ? 64 : 20;
 
 difference(){
   if(RELEASE){
@@ -39,21 +43,28 @@ module inner_2d(){
                 ,cos(i/teeth_count*360)*d*fac
                 ,0]) 
     rotate([0,0,-i/teeth_count*360])
-    scale([1,.5,1])
-    circle(d=teeth_d);
+    scale([1,(2*teeth_h)/teeth_d,1])
+    circle(d=teeth_d, $fn=16);
   }
 }
 
 module outer_2d(){
-  circle(d=d + 2*d_thickness);
-  if (RELEASE){
-    outer_handle_2d();
-  }
+  circle(d=d_sum);
+  outer_handle_2d();
 }
+
 module outer_handle_2d(){
-  translate([0,-handle_l-d/2]){
-    translate([-handle_w/2,0])
-      square([handle_w,handle_l]);
+    // square connector
+    translate([-handle_w/2,-handle_l/2])
+    square([handle_w,handle_l]);
+
+    //both ends
+    translate([0,-handle_l/2])
     circle(d=handle_w);
-  }
+    translate([0,handle_l/2])
+    circle(d=handle_w);
+
+    //support
+    scale([.6,1,1])
+    #circle(d=d_sum*1.2);
 }
