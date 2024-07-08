@@ -11,9 +11,10 @@
 
 */
 
-joachim_v1();
+// joachim_v1();
 
-translate(v = [ 60, 0, 0 ]) joachim_v2();
+// translate(v = [ 60, 0, 0 ])
+joachim_v2();
 
 module joachim_v1()
 {
@@ -25,8 +26,11 @@ module joachim_v1()
     y2 = 15;
     y_sum = y1 + y2;
 
-    hole_x = 20;
-    hole_y = 5;
+    // tol = 0.3;
+    tol = 0;
+
+    hole_x = 20 + tol;
+    hole_y = 5 + tol;
 
     extrude = 90;
 
@@ -43,8 +47,11 @@ module joachim_v2()
     y2 = 15;
     y_sum = y1 + y2;
 
-    hole_x = 30;
-    hole_y = 4.5;
+    // tol = 0.3;
+    tol = 0;
+
+    hole_x = 30 + tol;
+    hole_y = 4.5 + tol;
 
     extrude = 30;
 
