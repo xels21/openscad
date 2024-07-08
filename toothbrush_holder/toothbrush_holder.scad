@@ -50,18 +50,21 @@ x_max = holder_wall_thickness + holder_length;
 y_max = holder_thickness + holder_wall_length;
 
 
-toothbrush(true);
+toothbrush(with_mirror=true, gap = 7);
 // toothbrush(false);
 
-module toothbrush(with_mirror=false){
+module toothbrush(with_mirror=false, count=5, gap=holder_side_thickness){
+  extrude_one = (gap + tb_min_x + gap);
+  extrude = count*extrude_one;
   minkowskiOutsideRound(rad)
   difference(){
-    // minkowskiRound(rad)
-    linear_extrude(height = holder_side_thickness + tb_min_x + holder_side_thickness) 
+    linear_extrude(height = extrude)
     toothbrush_2d(with_mirror);
 
-    translate([holder_wall_thickness+rad*.4,0,holder_side_thickness])
-    rounded_cube_x([holder_length+hole_rad,holder_thickness+holder_angle_plus+holder_end, tb_min_x], r=hole_rad, center=false, fn=1);
+    #for(i=[1:count]){
+      translate([holder_wall_thickness+rad*.4,0,gap+((i-1)*(extrude_one))])
+      rounded_cube_x([holder_length+hole_rad,holder_thickness+holder_angle_plus+holder_end, tb_min_x], r=hole_rad, center=false, fn=1);
+    }
   }
 }
 
