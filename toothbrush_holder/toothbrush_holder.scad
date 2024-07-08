@@ -30,17 +30,17 @@ use <../libs/Round-Anything/MinkowskiRound.scad>;
 use <../libs/openscad_xels_lib/round.scad>;
 
 
-tb_min_x = 9;
+tb_min_x = 8;
 holder_length = 12;
 holder_end = 2;
 holder_thickness = 6;
-holder_angle_plus = 5;
+holder_angle_plus = 2;
 holder_side_thickness = 5;
 holder_wall_length = 40;
 holder_wall_thickness = 2;
 
-mirror_h1=19;
-mirror_h2=18;
+mirror_h1=18;
+mirror_h2=17;
 mirror_length=30;
 
 hole_rad=3;
