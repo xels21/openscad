@@ -31,7 +31,7 @@ use <../libs/openscad_xels_lib/round.scad>;
 
 
 tb_min_x = 8;
-holder_length = 12;
+holder_length = 9;
 holder_end = 2;
 holder_thickness = 6;
 holder_angle_plus = 2;
@@ -39,8 +39,8 @@ holder_side_thickness = 5;
 holder_wall_length = 40;
 holder_wall_thickness = 2;
 
-mirror_h1=18;
-mirror_h2=17;
+mirror_h1=17.5;
+mirror_h2=16.5;
 mirror_length=30;
 
 hole_rad=3;
