@@ -160,7 +160,10 @@ module plug_base(z=10, w_pin=0){
 
 
   difference(){
-    cylinder(h=z,d1=tube_inner_d, d2=tube_inner_d2, $fn=128);
+    intersection() {
+      cylinder(h=z,d1=tube_inner_d, d2=tube_inner_d2, $fn=128);
+      cylinder(h=z*1.9,d1=tube_inner_d*2, d2=0, $fn=128);
+    }
     // rotate([0,0,90]) 
     {
     translate([-led_x/2,tube_inner_d/2-led_y,plug_z_off]) 
@@ -172,7 +175,8 @@ module plug_base(z=10, w_pin=0){
         translate([1,-1,0]) 
         cube(size = [led_x-2,led_y+1,z-plug_z_off]);
       }
-      cube(size = [led_x,led_y,z-plug_z_off]);
+      led(led_x=led_x, led_y=led_y, plug_z_off=plug_z_off, z=z);
+      // cube(size = [led_x,led_y,z-plug_z_off]);
     }
 
     translate([-led_x/2,-tube_inner_d/2,plug_z_off]) 
@@ -184,8 +188,17 @@ module plug_base(z=10, w_pin=0){
           translate([1,0,0]) 
           cube(size = [led_x-2,led_y+1,z-plug_z_off]);
       }
-      cube(size = [led_x,led_y,z-plug_z_off]);
+      led(led_x=led_x, led_y=led_y, plug_z_off=plug_z_off, z=z);
       }
     }
   }
+}
+
+module led(led_x, led_y, plug_z_off, z){
+        cube(size = [led_x,led_y,z-plug_z_off]);
+
+        translate([led_x/2,0,z-led_x*.5]) 
+        rotate([-90,-30,0])
+        linear_extrude(height = led_y) 
+        circle(r = led_x*.8, $fn=3);
 }
