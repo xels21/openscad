@@ -4,11 +4,15 @@ use <../libs/openscad_xels_lib/helper.scad>;
 
 
 
+tol=.1;
 tube_outer_d = 25;
-tube_thickness = 1.9;
-tube_inner_d = tube_outer_d - (2 * tube_thickness);
+tube_thickness = 2.0;
+tube_inner_d_raw = tube_outer_d - (2 * tube_thickness);
+tube_inner_d = tube_inner_d_raw-tol*2;
 tube_inner_d2 = tube_inner_d-.2;
 
+tube_cutoff_raw = 6;
+tube_cutoff = tube_cutoff_raw-tol;
 
 
 charger_x=18;
@@ -46,18 +50,17 @@ solder_y = 1;
 
 solder_x_off=.5;
 
-tube_cutoff = 6;
 
-plug_charger(w_led=true);
+plug_charger(w_led=false);
 // plug_controller();
 
 
 
-module plug_controller(z=10, w_led=false){
+module plug_controller(z=10, w_led=false, inside_led=true){
   plug_z = controller_z+controller_z_plus;
   difference() {
     // rotate([0,0,90]) 
-    plug_base(plug_z, w_pin=1, w_led=w_led);
+    plug_base(plug_z, w_pin=1, w_led=w_led, inside_led=inside_led);
     translate([0,4.3,0]) 
     // charger();
     // rotate([0,0,180])
@@ -107,10 +110,10 @@ module controller(){
     cube([hole_x, controller_z_plus*2, controller_z_plus*2]);
 }
 
-module plug_charger(w_led=false){
+module plug_charger(w_led=false, inside_led=true){
   plug_z = charger_z+charger_z_plus;
   difference() {
-    plug_base(plug_z, w_led=w_led);
+    plug_base(plug_z, w_led=w_led, inside_led=true);
     #translate([-charger_x/2,1.7,0]) 
     charger();
     #translate([-switch_x/2,-6,0]) 

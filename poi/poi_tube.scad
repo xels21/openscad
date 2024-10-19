@@ -15,7 +15,7 @@ led_inner_x=5.2;
 
 led_y_plus=4;
 
-tube_connector_scale = .995;
+tube_connector_scale = .992;
 
 l_sum=406;
 l=l_sum/2;
@@ -24,7 +24,7 @@ screw_d=5; //from poi.scad
 screw_z=10; //from poi.scad
 
 
-$fn=64;
+$fn=128;
 
 // tube(h=l, w_led_start=true);
 // led();
