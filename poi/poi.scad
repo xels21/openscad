@@ -4,7 +4,6 @@ use <../libs/openscad_xels_lib/helper.scad>;
 
 
 
-
 tube_outer_d = 25;
 tube_thickness = 1.9;
 tube_inner_d = tube_outer_d - (2 * tube_thickness);
@@ -40,6 +39,7 @@ controller_z = 25.2;
 controller_z_plus=2;
 
 screw_d=5;
+screw_z=10;
 
 solder_x = 2.5;
 solder_y = 1;
@@ -64,8 +64,8 @@ module plug_controller(z=10, w_led=false){
     translate([-controller_x/2,-(usb_y+controller_y)/2,0])
     #controller();
 
-    translate([-tube_inner_d/2,0,12]) 
-    rotate([0,90,0])
+    translate([-tube_inner_d/2,0,screw_z+plug_z_off]) 
+    #rotate([0,90,0])
     cylinder(d=screw_d, h=tube_inner_d, $fn=32);
     // #translate([-switch_x/2,-6,0]) 
     // switch(plug_z);

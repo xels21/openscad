@@ -2,8 +2,8 @@ use <../libs/openscad_xels_lib/round.scad>;
 use <../libs/openscad_xels_lib/helper.scad>;
 use <../libs/openscad_xels_lib/geometry.scad>;
 
-tube_outer_d = 25;
-tube_thickness = 2;
+tube_outer_d = 25; //from poi.scad
+tube_thickness = 2; //from poi.scad
 tube_inner_d = tube_outer_d - (2 * tube_thickness);
 tube_cutoff=6;
 // tube_inner_d2 = tube_inner_d-.2;
@@ -15,19 +15,48 @@ led_inner_x=5.2;
 
 led_y_plus=4;
 
-tube_connector_scale = .99;
+tube_connector_scale = .995;
 
 l_sum=406;
 l=l_sum/2;
 
+screw_d=5; //from poi.scad
+screw_z=10; //from poi.scad
+
+
 $fn=64;
 
-tube(h=l);
+// tube(h=l, w_led_start=true);
 // led();
-// linear_extrude(height = 20) 
-// tube_connector();
+tube_connector();
 
-module tube_connector(){
+
+module tube_connector(height = 70){
+  hole_d=2;
+  hole_off=20;
+
+  difference(){
+    rotate([90,0,0])
+    translate([0,0,-height/2])
+    intersection() {
+      translate([0,0,height]) 
+      rotate([180,0,0])
+      cylinder(h = height, d1=tube_inner_d-1, d2=tube_outer_d*2);
+      cylinder(h = height, d1=tube_inner_d-1, d2=tube_outer_d*2);
+      linear_extrude(height = height)
+      tube_connector_2d();
+    }
+    rotate([0,60,0])
+    translate([0,hole_off,0]) 
+    #cylinder(h=tube_outer_d,d=hole_d, $fn=32, center=true);
+
+    rotate([0,-60,0])
+    translate([0,-hole_off,0]) 
+    #cylinder(h=tube_outer_d,d=hole_d, $fn=32, center=true);
+  }
+}
+
+module tube_connector_2d(){
   // rotate([90,0,0]) 
   // linear_extrude(height = 40) 
   scale([tube_connector_scale,tube_connector_scale])
@@ -46,12 +75,16 @@ module led(){
   }
 }
 
-module tube(h=20){
+module tube(h=20, w_led_start=false){
   difference(){
     linear_extrude(height = h)
     tube_2d(); 
-
-    cube([led_x-2,tube_inner_d,8],center=true);
+    if(w_led_start){
+      cube([led_x-2,tube_inner_d,8],center=true);
+      translate([-tube_outer_d,0,screw_z]) 
+      rotate([0,90,0])
+      #cylinder(h=2*tube_outer_d,d=screw_d);
+    }
   }
 }
 
