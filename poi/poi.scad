@@ -46,16 +46,18 @@ solder_y = 1;
 
 solder_x_off=.5;
 
-plug_charger();
+tube_cutoff = 6;
+
+plug_charger(w_led=true);
 // plug_controller();
 
 
 
-module plug_controller(z=10){
+module plug_controller(z=10, w_led=false){
   plug_z = controller_z+controller_z_plus;
   difference() {
     // rotate([0,0,90]) 
-    plug_base(plug_z, w_pin=1);
+    plug_base(plug_z, w_pin=1, w_led=w_led);
     translate([0,4.3,0]) 
     // charger();
     // rotate([0,0,180])
@@ -105,10 +107,10 @@ module controller(){
     cube([hole_x, controller_z_plus*2, controller_z_plus*2]);
 }
 
-module plug_charger(){
+module plug_charger(w_led=false){
   plug_z = charger_z+charger_z_plus;
   difference() {
-    plug_base(plug_z);
+    plug_base(plug_z, w_led=w_led);
     #translate([-charger_x/2,1.7,0]) 
     charger();
     #translate([-switch_x/2,-6,0]) 
@@ -150,7 +152,7 @@ module charger(){
   }
 }
 
-module plug_base(z=10, w_pin=0){
+module plug_base(z=10, w_pin=0, w_led=true, inside_led=true){
   rotate_extrude($fn=128){
     translate([tube_outer_d/2,plug_z_off/2,0])
     circle(d=plug_z_off, $fn=32);
@@ -163,6 +165,17 @@ module plug_base(z=10, w_pin=0){
     intersection() {
       cylinder(h=z,d1=tube_inner_d, d2=tube_inner_d2, $fn=128);
       cylinder(h=z*1.9,d1=tube_inner_d*2, d2=0, $fn=128);
+      if(inside_led){
+        linear_extrude(height = z)
+        difference(){
+          square([tube_inner_d,tube_inner_d-tube_cutoff],center=true);
+          translate([0,(tube_inner_d-tube_cutoff)/2,0]) 
+          square([led_x,3],center=true);
+          
+          translate([0,-(tube_inner_d-tube_cutoff)/2,0]) 
+          square([led_x,3],center=true);
+        }
+      }
     }
     // rotate([0,0,90]) 
     {
@@ -175,7 +188,9 @@ module plug_base(z=10, w_pin=0){
         translate([1,-1,0]) 
         cube(size = [led_x-2,led_y+1,z-plug_z_off]);
       }
-      led(led_x=led_x, led_y=led_y, plug_z_off=plug_z_off, z=z);
+      if(w_led){
+        led(led_x=led_x, led_y=led_y, plug_z_off=plug_z_off, z=z);
+      }
       // cube(size = [led_x,led_y,z-plug_z_off]);
     }
 
@@ -188,7 +203,9 @@ module plug_base(z=10, w_pin=0){
           translate([1,0,0]) 
           cube(size = [led_x-2,led_y+1,z-plug_z_off]);
       }
-      led(led_x=led_x, led_y=led_y, plug_z_off=plug_z_off, z=z);
+      if(w_led){
+        led(led_x=led_x, led_y=led_y, plug_z_off=plug_z_off, z=z);
+      }
       }
     }
   }
