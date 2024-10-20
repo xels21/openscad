@@ -51,8 +51,8 @@ solder_y = 1;
 solder_x_off=.5;
 
 
-plug_charger(w_led=false);
-// plug_controller();
+// plug_charger(w_led=false);
+plug_controller(w_led=false);
 
 
 
@@ -173,10 +173,10 @@ module plug_base(z=10, w_pin=0, w_led=true, inside_led=true){
         difference(){
           square([tube_inner_d,tube_inner_d-tube_cutoff],center=true);
           translate([0,(tube_inner_d-tube_cutoff)/2,0]) 
-          square([led_x,3],center=true);
+          square([led_x,2.3],center=true);
           
           translate([0,-(tube_inner_d-tube_cutoff)/2,0]) 
-          square([led_x,3],center=true);
+          square([led_x,2.3],center=true);
         }
       }
     }
@@ -188,7 +188,7 @@ module plug_base(z=10, w_pin=0, w_led=true, inside_led=true){
         // translate([0,-2,0]) 
         // cube(size = [led_x,led_y+2,4]);
 
-        translate([1,-1,0]) 
+        translate([1,-.75,0]) 
         cube(size = [led_x-2,led_y+1,z-plug_z_off]);
       }
       if(w_led){

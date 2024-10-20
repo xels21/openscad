@@ -23,18 +23,18 @@ l=l_sum/2;
 screw_d=5; //from poi.scad
 screw_z=10; //from poi.scad
 
+hole_d=2;
+hole_off=20;
 
 $fn=128;
 
 // tube(h=l, w_led_start=true);
+tube(h=l, w_led_start=false);
 // led();
-tube_connector();
+// tube_connector();
 
 
 module tube_connector(height = 70){
-  hole_d=2;
-  hole_off=20;
-
   difference(){
     rotate([90,0,0])
     translate([0,0,-height/2])
@@ -77,14 +77,22 @@ module led(){
 
 module tube(h=20, w_led_start=false){
   difference(){
-    linear_extrude(height = h)
-    tube_2d(); 
-    if(w_led_start){
-      cube([led_x-2,tube_inner_d,8],center=true);
-      translate([-tube_outer_d,0,screw_z]) 
-      rotate([0,90,0])
-      #cylinder(h=2*tube_outer_d,d=screw_d);
+    translate([0,0,h])
+    rotate([180,0,0])
+    difference(){
+      linear_extrude(height = h)
+      tube_2d(); 
+      if(w_led_start){
+        #cube([led_x-2,tube_inner_d,8],center=true);
+        translate([-tube_outer_d,0,screw_z]) 
+        rotate([0,90,0])
+        #cylinder(h=2*tube_outer_d,d=screw_d);
+      }
     }
+    // rotate([0,60,0])
+    translate([0,0,hole_off])
+    rotate([90,0,60])
+    #cylinder(h=tube_outer_d*2,d=hole_d, $fn=32, center=true);
   }
 }
 
