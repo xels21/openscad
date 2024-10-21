@@ -28,8 +28,8 @@ hole_off=20;
 
 $fn=128;
 
-// tube(h=l, w_led_start=true);
-tube(h=l, w_led_start=false);
+tube(h=l, w_led_start=true);
+// tube(h=l, w_led_start=false);
 // led();
 // tube_connector();
 
@@ -83,7 +83,7 @@ module tube(h=20, w_led_start=false){
       linear_extrude(height = h)
       tube_2d(); 
       if(w_led_start){
-        #cube([led_x-2,tube_inner_d,8],center=true);
+        #cube([led_x-2,tube_inner_d,10*2],center=true);
         translate([-tube_outer_d,0,screw_z]) 
         rotate([0,90,0])
         #cylinder(h=2*tube_outer_d,d=screw_d);
