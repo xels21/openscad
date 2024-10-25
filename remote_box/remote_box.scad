@@ -1,7 +1,9 @@
 use <../libs/Round-Anything/MinkowskiRound.scad>;
 
-x=48;
-y=23;
+// x=48;
+x=55; //bigger
+// y=23;
+y=25; //bigger
 z=55;
 
 t=2;
