@@ -1,15 +1,15 @@
 use <../libs/openscad_xels_lib/round.scad>;
 
-x=43.8;
-y=24;
+x=43.7;
+y=23.8;
 z=14;
 
 
 t=1;
-r=10;
+r=11;
 
 cut_x=21;
-cut_z=7;
+cut_z=8;
 cut_r=5;
 
 cable_x=4;
