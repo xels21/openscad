@@ -16,37 +16,54 @@ bottom_screw_2_gap_y = 15;
 bottom_screw_1_gap_x = 4;
 bottom_screw_2_gap_x = 37;
 
-
+plate_h=4;
 
 bottom_t = 7;
-front_t = 4;
+front_t = 3;
 
 motor_case_d = motor_d+front_t*2;
 
-translate([motor_l,motor_case_d/2,motor_case_d/2])
-rotate([0,90,0])
-plate(plate_h=4);
-
-
+motor_plate_y=14;
+motor_plate_x_off=1;
 
 difference(){
-  motor_case();
+  translate([0,0,bottom_t])
+  union(){
+    translate([motor_l,motor_case_d/2,motor_case_d/2])
+    rotate([0,90,0])
+    plate(plate_h=plate_h);
 
-  translate([0,front_t,bottom_t])
-  motor();
 
-  translate([0,front_t,bottom_t-3])
+
+    difference(){
+      motor_case();
+
+      translate([0,front_t,front_t])
+      motor();
+
+
+      translate([0,0,motor_case_d/2]) 
+      cube([motor_l-18, motor_case_d,motor_case_d/2]);
+    }
+    translate([0,0,-bottom_t]) 
+  cube([motor_l+plate_h,motor_case_d,bottom_t]);
+  }
+  translate([motor_l+motor_plate_x_off,0,0]) 
+  #cube([plate_h,motor_plate_y,motor_case_d+bottom_t]);
+  #translate([0,front_t,4])
   bottom_screws();
-
-  #translate([0,0,motor_case_d/2]) 
-  cube([motor_l-18, motor_case_d,motor_case_d/2]);
 }
 
 module motor_case(){
   translate([0,motor_case_d/2,motor_case_d/2])
   rotate([0,90,0])
   cylinder(d=motor_case_d,h=motor_l);
-  cube([motor_l,motor_case_d,motor_case_d/2]);
+  difference(){
+    cube([motor_l+plate_h,motor_case_d,motor_case_d/2]);
+    translate([0,motor_case_d/2,motor_case_d/2]) 
+    rotate([0,90,0])
+    cylinder(d=motor_case_d,h=motor_l+plate_h);
+  }
 }
 
 module bottom_screws(){
@@ -82,7 +99,7 @@ module motor(){
   }
 }
 
-module plate(plate_h=1.5, plate_off_x_plus=1,plate_off_y_plus=14){
+module plate(plate_h=1.5){
 
 
   // translate([-29,0,18.5])
@@ -108,9 +125,6 @@ module plate(plate_h=1.5, plate_off_x_plus=1,plate_off_y_plus=14){
       circle(d=plate_screw_d,$fn=fn/8);
       // END SCREW HOLES
     }
-
-    translate([-motor_case_d/2,motor_case_d/2-plate_off_y_plus,plate_off_x_plus])
-    cube([motor_case_d,motor_case_d,plate_h]);
   }
 }
 
