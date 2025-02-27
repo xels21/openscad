@@ -3,11 +3,6 @@ use <../libs/openscad_xels_lib/connector/vert_clip.scad>;
 
 thickness = 8;
 
-inner_w = 20;
-// outer_w = 60; //XBOX
-outer_w = 70; //PS4
-diff_w = outer_w - inner_w;
-
 left = thickness / 2;      // left side
 hold = thickness;          // lenght of the "middle" part
 right = thickness;         // right side
@@ -55,6 +50,10 @@ export_mount_ps4 = true;
 
 // export_bottom = true;
 export_bottom = false;
+
+inner_w = 20;
+outer_w = export_mount_ps4 ? 70 /*PS4*/ : 60; /*XBOX*/
+diff_w = outer_w - inner_w;
 
 if (export_top_hanger) {
   top_hanger_mount();
