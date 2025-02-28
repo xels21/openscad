@@ -14,9 +14,11 @@ speaker_wo_screw_adjust_raw = 10;
 
 metal_screw_d=6.1;
 top_sub=10;
-thickness=7;
+// thickness=7;
+thickness=8;
 desk_l=40;
-mount_z=20;
+// mount_z=20;
+mount_z=22;
 
 
 screw_res = 1;
