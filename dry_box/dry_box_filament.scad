@@ -64,8 +64,14 @@ non_thread_length     = 0;
 //Diameter for the non-threaded section (-1: Same as inner diameter of the thread, 0: Same as outer diameter of the thread, value: The given value)
 non_thread_diameter   = 0;
 
-fil_screw();
+nut_thread_outer_diameter_tol = 0.4;
+
+
+// fil_screw();
 // fil_nut();
+// translate([60,0,0])
+// fil_nut(isConterNut=true);
+fil_nut(isConterNut=true);
 
 module fil_screw(){
   difference(){
@@ -92,7 +98,7 @@ module fil_screw(){
   }
 }
 
-module fil_nut(){
+module fil_nut(isConterNut=false){
   screw_offset = 12;
   rounding = debug?0:1;
 
@@ -101,7 +107,6 @@ module fil_nut(){
 
   nut_w = 8;
 
-  nut_thread_outer_diameter_tol = 0.4;
 
   finger_hole_d = (max_d-min_d)*0.85;//*1.03;
   holes = 3;
@@ -111,15 +116,17 @@ module fil_nut(){
 
   difference(){
     minkowskiOutsideRound(rounding)
-    // minkowskiOutsideRound(1)
-    difference(){
-      cylinder(d1=max_d,d2=min_d,h=nut_w,$fn=6);
-
-      for (i=[1:holes]) {
-              translate([sin(i/holes*360+rot_of)*max_d*hol_fac
-                ,cos(i/holes*360+rot_of)*max_d*hol_fac
-                ,0]) 
-                cylinder(d=finger_hole_d,h=nut_w,$fn=6);
+    if(isConterNut){
+      cylinder(d=min_d+4,h=nut_w,$fn=6);
+    }else{
+      difference(){
+        cylinder(d1=max_d,d2=min_d,h=nut_w,$fn=6);
+          for (i=[1:holes]) {
+                  translate([sin(i/holes*360+rot_of)*max_d*hol_fac
+                    ,cos(i/holes*360+rot_of)*max_d*hol_fac
+                    ,0]) 
+                    cylinder(d=finger_hole_d,h=nut_w,$fn=6);
+          }
       }
     }
 
