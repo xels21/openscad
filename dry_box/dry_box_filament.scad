@@ -68,10 +68,10 @@ nut_thread_outer_diameter_tol = 0.4;
 
 
 // fil_screw();
-// fil_nut();
+fil_nut();
 // translate([60,0,0])
 // fil_nut(isConterNut=true);
-fil_nut(isConterNut=true);
+// fil_nut(isConterNut=true);
 
 module fil_screw(){
   difference(){
@@ -99,18 +99,22 @@ module fil_screw(){
 }
 
 module fil_nut(isConterNut=false){
-  screw_offset = 12;
-  rounding = debug?0:1;
+  // screw_offset = 12;
+  screw_offset = 20;
+  rounding = debug?0:1.0;
 
-  max_d=90;
+  // max_d=90;
+  max_d=100;
   min_d=thread_outer_diameter+screw_offset;
 
-  nut_w = 8;
+  // nut_w = 8;
+  nut_w = 10;
 
 
-  finger_hole_d = (max_d-min_d)*0.85;//*1.03;
+  finger_hole_d = min_d*1.0;
   holes = 3;
-  hol_fac = 0.4;
+
+  hol_fac = 0.433;
 
   rot_of = 0;
 
