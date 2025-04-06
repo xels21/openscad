@@ -24,7 +24,7 @@ charger_x=28; //w/o usbc
 charger_pins_x=23; //w/o usbc
 charger_usb_off_z=1.5;
 charger_z=usb_c_z+charger_usb_off_z;
-charger_off_z=outer_d/2-(1/3*charger_z);
+charger_off_z=outer_d/2-(1/1*charger_z);
 
 uC_x=23.2; //w/usb
 uC_y=12; //w/pins
