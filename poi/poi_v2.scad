@@ -73,8 +73,8 @@ screw_3_off_x=180;
 
 
 uC_reset_off_x=13;
-uC_reset_x=3;
-uC_reset_y=5;
+uC_reset_x=2.5;
+uC_reset_y=5.5;
 
 
 
@@ -99,8 +99,10 @@ led_z_plus=2;
 led_z_x_plus=5;
 
 
-// screw();
 all(is_top=false);
+// all(is_top=true);
+// tube_raw_pos();
+// screw();
 // charger();
 // switch();
 // uC_neg();
@@ -354,9 +356,16 @@ module string_hole_pos(){
   cube([string_hole_x, inner_d-2*string_hole_y_cut, outer_d]);
 }
 module string_hole_neg(){
+  string_hole_plus_d=8;
+  string_hole_plus_h_d=3;
+
   // translate([string_hole_x_off,thickness+string_hole_y_cut,0]) 
   translate([string_hole_x_off+string_hole_x/2,outer_d/2,0]) 
   union(){
+    cylinder(h = string_hole_plus_h_d, d1 = string_hole_d+string_hole_plus_d, d2=string_hole_d, $fn=res);
+
+    translate([0,0,outer_d-string_hole_plus_h_d])
+    cylinder(h = string_hole_plus_h_d, d2 = string_hole_d+string_hole_plus_d, d1=string_hole_d, $fn=res);
     cylinder(h = outer_d, d = string_hole_d, $fn=res);
 
     translate([-string_hole_x/3,0,0]) 
@@ -379,9 +388,10 @@ module tube_raw(){
 module tube_raw_pos(){
   translate([0,outer_d/2,outer_d/2])
   rotate([90,180,90])
+
   // cylinder(d=outer_d, h=length, $fn=res);
 
-  difference(){
+  intersection(){
     linear_extrude(height = length)
     round2d(OR=1,IR=1)
     union(){
@@ -396,7 +406,14 @@ module tube_raw_pos(){
       led_pos_2d();
     }
 
-    // cube([100,100,100]);
+    union(){
+      cylinder(d=2*outer_d, h=string_hole_x_off);
+
+      translate([0,0,string_hole_x_off]) 
+      scale([2,1,1])
+      rotate([0,0,45/2])
+      cylinder(d1=1.16*outer_d,d2=.73*outer_d, h=length-string_hole_x_off, $fn=8);
+    }
   }
 }
 module tube_raw_neg(){
@@ -420,9 +437,10 @@ module tube_raw_neg(){
     tube_led_helper=3;
     tube_led_x=10;
 
-    translate([-outer_d/2,-(led_x-1)/2,length-tube_led_x]) 
-    cube([tube_led_helper,led_x-1,tube_led_x]);
-    translate([outer_d/2-tube_led_helper,-(led_x-1)/2,length-tube_led_x]) 
-    cube([tube_led_helper,led_x-1,tube_led_x]);
+    translate([-outer_d/2,-(led_x)/2+1,length-tube_led_x]) 
+    cube([tube_led_helper,led_x+1,tube_led_x]);
+
+    translate([outer_d/2-tube_led_helper,-(led_x)/2+1,length-tube_led_x]) 
+    cube([tube_led_helper,led_x+1,tube_led_x]);
   }
 }
