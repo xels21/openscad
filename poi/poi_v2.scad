@@ -17,7 +17,7 @@ use <../libs/Round-Anything/MinkowskiRound.scad>;
 thickness=2;
 length = 290;
 // inner_d= 18;
-inner_d= 19;
+inner_d= 19.5;
 outer_d= inner_d+thickness*2;
 
 battery_d=15;
@@ -28,7 +28,7 @@ usb_c_y=9.5;
 usb_c_z=3;
 
 charger_y=17;
-charger_x=28; //w/o usbc
+charger_x=27.4; //w/o usbc
 charger_pins_x=23; //w/o usbc
 charger_usb_off_z=1.5;
 charger_z=usb_c_z+charger_usb_off_z;
@@ -51,8 +51,8 @@ res=64;
 screw_d=3;
 screw_d_plus=6;
 screw_d_all=2*screw_d_plus+screw_d;
-screw_d2=6;
-screw_h=2;
+screw_d2=8;
+screw_h=2.2;
 
 
 string_hole_d = 7;
@@ -79,28 +79,28 @@ uC_reset_y=5;
 
 
 
-switch_small_x=5.2;
-switch_small_y=3.2;
+switch_small_x=5.4;
+switch_small_y=3.1;
 
 switch_x=20;
 switch_y=6;
-switch_z=4;
+switch_z=3.5;
 switch_screw_out_off_x=2.5;
 switch_screw_d=1.5;
 
 switch_x_off=120;
 // switch_x_off=length/2-switch_x/2;
 
-led_x=5;
-led_inner_x=3;
+led_x=5.5;
+led_inner_x=2;
 led_z_1=1;
 led_z_2=2.5;
-  led_z_plus=2;
-  led_z_x_plus=5;
+led_z_plus=2;
+led_z_x_plus=5;
 
 
 // screw();
-all();
+all(is_top=false);
 // charger();
 // switch();
 // uC_neg();
@@ -381,18 +381,22 @@ module tube_raw_pos(){
   rotate([90,180,90])
   // cylinder(d=outer_d, h=length, $fn=res);
 
-  linear_extrude(height = length)
-  round2d(OR=1,IR=1)
-  union(){
-    circle(d=outer_d, $fn=res);
+  difference(){
+    linear_extrude(height = length)
+    round2d(OR=1,IR=1)
+    union(){
+      circle(d=outer_d, $fn=res);
 
-    translate([-outer_d/2,0,0]) 
-    rotate([0,0,90])
-    led_pos_2d();
+      translate([-outer_d/2,0,0]) 
+      rotate([0,0,90])
+      led_pos_2d();
 
-    translate([outer_d/2,0,0]) 
-    rotate([0,0,-90])
-    led_pos_2d();
+      translate([outer_d/2,0,0]) 
+      rotate([0,0,-90])
+      led_pos_2d();
+    }
+
+    // cube([100,100,100]);
   }
 }
 module tube_raw_neg(){
