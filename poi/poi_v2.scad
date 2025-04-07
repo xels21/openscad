@@ -4,7 +4,15 @@ use <../libs/Round-Anything/MinkowskiRound.scad>;
 
 
 // IDEA: split every module with positive and negative and translate it
-// REASON: 
+// REASON: better unoin/difference/intersection later on
+
+// ORDER: (left -> rioght)
+// 1. charger
+// 2. battery (heavy endpoint)
+// 3. switch
+// 4. converter
+// 5. (cabling)
+// 6. uC
 
 thickness=2;
 length = 290;
@@ -59,9 +67,9 @@ string_hole_y_cut = 3; //cable
 
 screw_1_off_x=charger_x+thickness;
 // screw_2_off_x=length/3;
-screw_2_off_x=80;
+screw_2_off_x=screw_1_off_x+1.5*screw_d_all+battery_x;
 // screw_3_off_x=length*2/3;
-screw_3_off_x=170;
+screw_3_off_x=180;
 
 
 uC_reset_off_x=13;
@@ -80,8 +88,8 @@ switch_z=4;
 switch_screw_out_off_x=2.5;
 switch_screw_d=1.5;
 
-switch_x_off=48;
-// switch_x_off=1*length/5;
+switch_x_off=120;
+// switch_x_off=length/2-switch_x/2;
 
 led_x=5;
 led_inner_x=3;
