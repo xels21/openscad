@@ -20,8 +20,14 @@ length = 290;
 inner_d= 19.5;
 outer_d= inner_d+thickness*2;
 
-battery_d=15;
-battery_x=51;
+battery_18650_d=18;
+battery_18650_x=67;
+
+battery_14500_d=15;
+battery_14500_x=51;
+
+battery_d = battery_18650_d;
+battery_x = battery_18650_x;
 
 usb_c_x=8;
 usb_c_y=9.5;
@@ -55,7 +61,10 @@ screw_d2=8;
 screw_h=2.2;
 
 
-string_hole_d = 7;
+converter_x= 23;
+converter_y= 12;
+
+string_hole_d = 6.5;
 string_hole_thickness = 3;
 // string_hole_outer_d = string_hole_innder_d + 2*string_hole_thickness;
 string_hole_x = string_hole_d + 2*screw_d_all;
@@ -69,7 +78,7 @@ screw_1_off_x=charger_x+thickness;
 // screw_2_off_x=length/3;
 screw_2_off_x=screw_1_off_x+1.5*screw_d_all+battery_x;
 // screw_3_off_x=length*2/3;
-screw_3_off_x=180;
+screw_3_off_x=185;
 
 
 uC_reset_off_x=13;
@@ -88,7 +97,8 @@ switch_z=3.5;
 switch_screw_out_off_x=2.5;
 switch_screw_d=1.5;
 
-switch_x_off=120;
+// switch_x_off=120;
+switch_x_off = screw_2_off_x+screw_d_all/2+1;
 // switch_x_off=length/2-switch_x/2;
 
 led_x=5.5;
@@ -265,6 +275,13 @@ module all(is_top=false){
         screw_3(is_pos=true);
 
         switch_pos();
+        translate([switch_x_off+switch_x+1,thickness+string_hole_y_cut,0]) 
+        cube([3,inner_d-2*string_hole_y_cut,inner_d]);
+        %converter();
+
+        %translate([screw_1_off_x+screw_d_all,thickness+battery_d/2,thickness+battery_d/2])
+        rotate([0,90,0])
+        cylinder(h=battery_x, d=battery_d, $fn=res);
       }
     }
     union() {
@@ -283,6 +300,10 @@ module all(is_top=false){
   }
 }
 
+module converter(){
+  translate([switch_x_off+switch_x+5,(outer_d-converter_y)/2,0]) 
+  cube([converter_x, converter_y, 10]);
+}
 module screw_1(is_pos=true, both_sides=false){
   translate([(screw_d_all/2)+screw_1_off_x,outer_d/2,0]) 
   if(is_pos){
