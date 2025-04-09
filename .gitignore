@@ -2,7 +2,7 @@
 *.lnk
 *.vscode
 *.gcode
-*dasha.3mf
+*.3mf
 # *.jpg
 
 

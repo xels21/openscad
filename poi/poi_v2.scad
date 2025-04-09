@@ -28,7 +28,7 @@ usb_c_y=9.5;
 usb_c_z=3;
 
 charger_y=17;
-charger_x=27.4; //w/o usbc
+charger_x=28.2; //w/o usbc
 charger_pins_x=23; //w/o usbc
 charger_usb_off_z=1.5;
 charger_z=usb_c_z+charger_usb_off_z;
@@ -424,13 +424,13 @@ module tube_raw_neg(){
     linear_extrude(height = length-2*thickness) 
     circle(d=inner_d, $fn=res);
   
-    linear_extrude(height = length-thickness) 
-    translate([-outer_d/2,0,0]) 
+    translate([-outer_d/2,0,-thickness+.4])
+    linear_extrude(height = length) 
     rotate([0,0,90])
     led_neg_2d();
 
-    linear_extrude(height = length-thickness) 
-    translate([outer_d/2,0,0]) 
+    translate([outer_d/2,0,-thickness+.4])
+    linear_extrude(height = length) 
     rotate([0,0,-90])
     led_neg_2d();
 
