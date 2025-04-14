@@ -40,14 +40,7 @@ charger_usb_off_z=1.5;
 charger_z=usb_c_z+charger_usb_off_z;
 charger_off_z=outer_d/2-(1/1*charger_z);
 
-uC_x=23.2; //w/usb
-uC_y=12; //w/pins
-uC_z=charger_z;
-uC_usb_off_z = charger_usb_off_z;
-uC_off_z = charger_off_z;
 
-// uC_x=22;
-// uC_y=18;
 
 // top_cut=outer_d/2+(2/3*charger_z);
 // top_cut=outer_d/2+charger_z/2;
@@ -59,17 +52,34 @@ screw_d_plus=6;
 screw_d_all=2*screw_d_plus+screw_d;
 screw_d2=8;
 screw_h=2.2;
+screw_y_cut = 4; //cable
+screw_y=inner_d-2*screw_y_cut;
 
 
 converter_x= 23;
 converter_y= 12;
+
+
+uC_x=23.2; //w/usb
+// uC_y=12; //w/pins
+uC_y=screw_y; //w/pins
+uC_z=charger_z;
+uC_usb_off_z = charger_usb_off_z;
+uC_off_z = charger_off_z;
+
+// uC_x=22;
+// uC_y=18;
+
+uC_reset_off_x=13;
+uC_reset_x=2.5;
+uC_reset_y=5.5;
+
 
 string_hole_d = 6.5;
 string_hole_thickness = 3;
 // string_hole_outer_d = string_hole_innder_d + 2*string_hole_thickness;
 string_hole_x = string_hole_d + 2*screw_d_all;
 string_hole_x_off = length-uC_x-string_hole_x-2;
-string_hole_y_cut = 3; //cable
 
 
 
@@ -78,13 +88,7 @@ screw_1_off_x=charger_x+thickness;
 // screw_2_off_x=length/3;
 screw_2_off_x=screw_1_off_x+1.5*screw_d_all+battery_x;
 // screw_3_off_x=length*2/3;
-screw_3_off_x=185;
-
-
-uC_reset_off_x=13;
-uC_reset_x=2.5;
-uC_reset_y=5.5;
-
+screw_3_off_x=195;
 
 
 
@@ -238,8 +242,8 @@ module screw(){
 
 module screw_pos(){
   // cylinder(h = outer_d, d = screw_d_all, $fn=res);
-  translate([-(screw_d_all/2), -( inner_d-2*string_hole_y_cut)/2,0]) 
-  cube([screw_d_all,  inner_d-2*string_hole_y_cut, outer_d]);
+  translate([-(screw_d_all/2), -( screw_y)/2,0]) 
+  cube([screw_d_all,  screw_y, outer_d]);
 }
 
 module screw_neg(both_sides=true){
@@ -275,13 +279,10 @@ module all(is_top=false){
         screw_3(is_pos=true);
 
         switch_pos();
-        translate([switch_x_off+switch_x+1,thickness+string_hole_y_cut,0]) 
-        cube([3,inner_d-2*string_hole_y_cut,inner_d]);
+        translate([switch_x_off+switch_x+1,thickness+screw_y_cut,0]) 
+        cube([3,inner_d-2*screw_y_cut,inner_d]);
         %converter();
 
-        %translate([screw_1_off_x+screw_d_all,thickness+battery_d/2,thickness+battery_d/2])
-        rotate([0,90,0])
-        cylinder(h=battery_x, d=battery_d, $fn=res);
       }
     }
     union() {
@@ -290,6 +291,7 @@ module all(is_top=false){
       screw_2(is_pos=false);
       screw_3(is_pos=false);
       switch_neg();
+      battery_neg();
 
       // tube_raw();
       // tube();
@@ -300,8 +302,27 @@ module all(is_top=false){
   }
 }
 
+module battery_neg(){
+  translate([screw_1_off_x+screw_d_all,outer_d/2,thickness+battery_d/2])
+  union(){
+    rotate([0,90,0])
+    cylinder(h=battery_x, d=battery_d, $fn=res);
+
+    battery_plus_x = 3;
+    battery_plus_y = 2;
+    battery_plus_z = 8;
+
+    translate([-battery_plus_x,-(battery_d+2*battery_plus_y)/2,-battery_plus_z/2])
+    difference(){
+      cube([battery_x+2*battery_plus_x, battery_d+2*battery_plus_y, battery_plus_z]);
+      translate([0,((battery_d+2*battery_plus_y)-(battery_d-6))/2,0])
+      cube([battery_x+2*battery_plus_x, battery_d-6, battery_plus_z]);
+    }
+  }
+}
+
 module converter(){
-  translate([switch_x_off+switch_x+5,(outer_d-converter_y)/2,0]) 
+  translate([switch_x_off+switch_x+10,(outer_d-converter_y)/2,0]) 
   cube([converter_x, converter_y, 10]);
 }
 module screw_1(is_pos=true, both_sides=false){
@@ -373,14 +394,14 @@ module string_hole(){
 }
 
 module string_hole_pos(){
-  translate([string_hole_x_off,thickness+string_hole_y_cut,0]) 
-  cube([string_hole_x, inner_d-2*string_hole_y_cut, outer_d]);
+  translate([string_hole_x_off,thickness+screw_y_cut,0]) 
+  cube([string_hole_x, inner_d-2*screw_y_cut, outer_d]);
 }
 module string_hole_neg(){
   string_hole_plus_d=8;
   string_hole_plus_h_d=3;
 
-  // translate([string_hole_x_off,thickness+string_hole_y_cut,0]) 
+  // translate([string_hole_x_off,thickness+screw_y_cut,0]) 
   translate([string_hole_x_off+string_hole_x/2,outer_d/2,0]) 
   union(){
     cylinder(h = string_hole_plus_h_d, d1 = string_hole_d+string_hole_plus_d, d2=string_hole_d, $fn=res);
@@ -458,10 +479,11 @@ module tube_raw_neg(){
     tube_led_helper=3;
     tube_led_x=10;
 
-    translate([-outer_d/2,-(led_x)/2+1,length-tube_led_x]) 
-    cube([tube_led_helper,led_x+1,tube_led_x]);
+    // led end line
+    translate([-outer_d/2,-(led_x)/2,length-tube_led_x]) 
+    cube([tube_led_helper,led_x+2,tube_led_x]);
 
-    translate([outer_d/2-tube_led_helper,-(led_x)/2+1,length-tube_led_x]) 
-    cube([tube_led_helper,led_x+1,tube_led_x]);
+    translate([outer_d/2-tube_led_helper,-(led_x)/2,length-tube_led_x]) 
+    cube([tube_led_helper,led_x+2,tube_led_x]);
   }
 }
