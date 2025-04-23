@@ -10,15 +10,15 @@ include <../libs/MCAD/2Dshapes.scad>;
 | |________,-*
 */
 
-all_h = 25;
-all_d = 38;
+all_h = 23;
+all_d = 32;
 all_r = all_d / 2;
 
-string_d = 5;
+string_d = 6;
 string_r = string_d / 2;
 string_h = 8;
 
-knot_d = 20;
+knot_d = 17;
 knot_r = knot_d / 2;
 knot_h = all_h - string_h;
 
@@ -37,7 +37,7 @@ module poi_knot_2d()
       complexRoundSquare(size = [ all_r, all_h ],
         // rads1 = [ 5, 1 ],
         rads2 = [ 6, 5 ],
-        rads3 = [ 9, 20 ],
+        rads3 = [ 9, 17 ],
         // rads4 = [ 0, 0 ],
         center = false);
 
