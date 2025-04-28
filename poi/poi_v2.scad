@@ -413,7 +413,7 @@ module string_hole_neg(){
     translate([-string_hole_x/3,0,0]) 
     screw_neg(both_sides=false);
 
-    translate([string_hole_x/3,0,0]) 
+    translate([string_hole_x/3,0,-1.1]) 
     screw_neg(both_sides=false);
   }
 }
