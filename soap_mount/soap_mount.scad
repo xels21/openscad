@@ -11,7 +11,7 @@ inner_h = 40;
 holder_t=2.2;
 holder_x=15.5;
 
-thickness = 5;
+thickness = 4;
 
 
 max_x=inner_d2+3*thickness;
@@ -27,7 +27,7 @@ module all(){
     // minkowskiOutsideRound(2)
     difference(){
       shell();
-      deco();
+      #deco();
     }
     #angle();
     soap();
@@ -36,11 +36,14 @@ module all(){
 }
 
 module deco(){
-  translate([max_x-30,0,max_z]) 
-  scale([1,1.6,1])
-  rotate([0,90,0])
-  cylinder(d=40,h=30,$fn=8);
-
+  // translate([max_x-30,0,max_z]) 
+  // scale([1,1.6,1])
+  // rotate([0,90,0])
+  // cylinder(d=40,h=30,$fn=8);
+  translate([max_y*.67,max_y/2,max_y*1.25]) 
+  rotate([90,0,0])
+  rotate([0,0,.5/8*360])
+  cylinder(h=max_y,d=2*max_y,$fn=8);
 }
 
 module soap(){
@@ -57,7 +60,7 @@ module angle(){
   translate([0,0,32])
   rotate([0,90,0])
   union(){
-    translate([0,0,thickness*2-1.5]) 
+    translate([0,0,thickness*1.5]) 
     cylinder(h = 4, d1=4, d2=10);
     cylinder(h = thickness*2, d=4);
   }
@@ -65,7 +68,7 @@ module angle(){
 
 module shell(){
   translate([max_y/2+thickness,0,0]) 
-  cylinder(d=max_y,h=max_z, $fn=16);
+  cylinder(d=max_y,h=max_z);
   translate([0,-max_y/2,0]) 
   cube([max_y/2+thickness,max_y,max_z]);
 }
