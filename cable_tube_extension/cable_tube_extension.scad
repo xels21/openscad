@@ -19,15 +19,18 @@ cable_tube_extension();
 module cable_tube_extension() {
   difference() {
     translate([0, 0, -extend_z_raw]) {
+
+      // EXTENSION
       translate([0, 0, extend_z / 2])
         rounded_cube_xyz(
           [
             mount_x + 2 * extend_xy_1,
             mount_y + 2 * extend_xy_1,
             extend_z,
-          ], r=6, center=true
+          ], r=7, center=true, $fn=4
         );
 
+      // BOTTOM - BETTER GRIP
       difference() {
         rounded_cube_xyz(
           [
@@ -51,6 +54,7 @@ module cable_tube_extension() {
     // HOLE
     rounded_cube_z([hole_x, hole_y, extend_z * 2], r=hole_r, center=true);
 
+    // GAP FOR ACTUAL HOLDER
     translate([0,0,mount_z/2]) 
     cube(
       [
