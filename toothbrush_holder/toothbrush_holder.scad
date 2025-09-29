@@ -31,6 +31,7 @@ use <../libs/openscad_xels_lib/round.scad>;
 
 
 tb_min_x = 8;
+tb_min_x_off = 2;
 holder_length = 9;
 holder_end = 2;
 holder_thickness = 6;
@@ -50,20 +51,30 @@ x_max = holder_wall_thickness + holder_length;
 y_max = holder_thickness + holder_wall_length;
 
 
-toothbrush(with_mirror=true, gap = 7);
+toothbrush(with_mirror=true, gap = 10);
 // toothbrush(false);
+// toothbrush_2d();
 
-module toothbrush(with_mirror=false, count=5, gap=holder_side_thickness){
+module toothbrush(with_mirror=false, count=4, gap=holder_side_thickness){
   extrude_one = (gap + tb_min_x + gap);
   extrude = count*extrude_one;
-  minkowskiOutsideRound(rad)
+  // minkowskiOutsideRound(rad)
   difference(){
     linear_extrude(height = extrude)
     toothbrush_2d(with_mirror);
 
-    #for(i=[1:count]){
+    for(i=[1:count]){
       translate([holder_wall_thickness+rad*.4,0,gap+((i-1)*(extrude_one))])
-      rounded_cube_x([holder_length+hole_rad,holder_thickness+holder_angle_plus+holder_end, tb_min_x], r=hole_rad, center=false, fn=1);
+      translate([0,0,tb_min_x])
+      rotate([-90,0,0])
+      linear_extrude(height = holder_length+hole_rad)
+      union(){
+        translate([tb_min_x/2,tb_min_x_off/2]) 
+        square(size = [tb_min_x-tb_min_x_off,tb_min_x-tb_min_x_off]);
+        translate([tb_min_x/2,tb_min_x/2]) 
+        circle(r = tb_min_x/2);
+      }
+      // rounded_cube_x([holder_length+hole_rad,holder_thickness+holder_angle_plus+holder_end, tb_min_x], r=hole_rad, center=false, fn=1);
     }
   }
 }
@@ -83,7 +94,7 @@ module toothbrush_2d(with_mirror=false){
    [0,y_max],
    [holder_wall_thickness,y_max],
    [holder_wall_thickness,holder_thickness],
-   [x_max-holder_end,holder_thickness+(holder_angle_plus*(1-(holder_wall_thickness/(x_max-holder_end))))],
+   [-1+x_max-holder_end,holder_thickness+(holder_angle_plus*(1-(holder_wall_thickness/(x_max-holder_end))))],
    [x_max-holder_end,holder_end+holder_thickness+(holder_angle_plus*(1-(holder_wall_thickness/(x_max-holder_end))))],
    [x_max,holder_end+holder_thickness+(holder_angle_plus*(1-(holder_wall_thickness/(x_max-holder_end))))],
    [x_max,holder_angle_plus+holder_end],

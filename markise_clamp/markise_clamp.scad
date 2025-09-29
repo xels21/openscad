@@ -25,7 +25,7 @@ y_max_big = 40.5;
 x_2_big = 14;
 y_2_big = 6.5;
 
-tol = 1;
+tol = .8;
 
 x_hold = 2.5;
 
@@ -36,6 +36,19 @@ t = 6;
 
 linear_extrude(height=length)
   clamp_2d_small();
+  // clamp_2d_big();
+
+module clamp_2d_big() {
+  clamp_2d(
+    x_max=x_max_big + tol,
+    y_max=y_max_big + tol,
+    x_2=x_2_big,
+    y_2=y_2_big,
+    x_hold=x_hold,
+    t=t,
+    r=r
+  );
+}
 
 module clamp_2d_small() {
   clamp_2d(
