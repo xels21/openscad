@@ -112,8 +112,8 @@ led_z_2=2.5;
 led_z_plus=2;
 led_z_x_plus=5;
 
-
-all(is_top=false);
+protector();
+// all(is_top=false);
 // all(is_top=true);
 // tube_raw_pos();
 // screw();
@@ -126,6 +126,17 @@ all(is_top=false);
 // uC();
 // cloak();
 // led();
+
+module protector(){
+  // linear_extrude(height = length/2)
+  linear_extrude(height = 20)
+  difference(){
+    circle(d=outer_d+10, $fn=res); //about 34mm
+    // circle(d=34, $fn=res);
+    offset(.3)
+    tube_raw_pos_2d();
+  }
+}
 
 module led_2d(){
   difference() {
@@ -427,6 +438,22 @@ module tube_raw(){
     tube_raw_neg();
   }
 }
+
+module tube_raw_pos_2d(){
+  round2d(OR=1,IR=1)
+  union(){
+    circle(d=outer_d, $fn=res);
+
+    translate([-outer_d/2,0,0]) 
+    rotate([0,0,90])
+    led_pos_2d();
+
+    translate([outer_d/2,0,0]) 
+    rotate([0,0,-90])
+    led_pos_2d();
+  }
+}
+
 module tube_raw_pos(){
   translate([0,outer_d/2,outer_d/2])
   rotate([90,180,90])
@@ -435,18 +462,7 @@ module tube_raw_pos(){
 
   intersection(){
     linear_extrude(height = length)
-    round2d(OR=1,IR=1)
-    union(){
-      circle(d=outer_d, $fn=res);
-
-      translate([-outer_d/2,0,0]) 
-      rotate([0,0,90])
-      led_pos_2d();
-
-      translate([outer_d/2,0,0]) 
-      rotate([0,0,-90])
-      led_pos_2d();
-    }
+    tube_raw_pos_2d();
 
     union(){
       cylinder(d=2*outer_d, h=string_hole_x_off);
