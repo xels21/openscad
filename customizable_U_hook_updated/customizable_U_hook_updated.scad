@@ -56,7 +56,7 @@ second_hook=0; // [0, 1]
 /* [MAIN HOOK SIZE] */
 
 // Intern diameter of hook's main U shape
-hook_size=20; // [0.1:250]
+hook_size=17; // [0.1:250]
 
 // Hook's "thickness" = object's width = print's height
 thickness=18; // [0.1:250]
@@ -108,13 +108,13 @@ tolerance=0.5; // [0:0.1:10]
 /* [BRACKET] */
 
 // Bracket's main size
-bracket_size=15; // [0:250]
+bracket_size=14.5; // [0:250]
 
 // Bracket's back lenght
-stop_lenght=15; // [0:250]
+stop_lenght=13; // [0:250]
 
 // Bracket Stiffness (only with square bracket)
-bracket_stiffness=5; // [0:100]
+bracket_stiffness=4.5; // [0:100]
 
 
 
