@@ -101,8 +101,13 @@ led_z_2 = 2.5;
 led_z_plus = 2;
 led_z_x_plus = 5;
 
-protector_top();
+// protector_top();
+protector_middle();
+
+// translate([20,0,-length / 3]) 
+// rotate([0,-90,0])
 // all(is_top=false);
+
 // all(is_top=true);
 // tube_raw_pos();
 // screw();
@@ -130,8 +135,20 @@ module protector_top() {
 }
 
 module protector_middle() {
-  linear_extrude(height=length / 3)
-  protector_2d(with_switch=true);
+  l = length / 4;
+  s = 10;
+  difference() {
+    union() {
+        linear_extrude(height=l+switch_x/2)
+        protector_2d(with_switch=true);
+
+        translate([0,0,l+switch_x/2]) 
+        linear_extrude(height=l-switch_x/2)
+        protector_2d(with_switch=false);
+    }
+    #translate([0,outer_d/2+s-4.5,l])
+    rounded_cube_yz([14,s,switch_x], center=true, r=4);
+  }
 }
 
 module protector_bottom() {
