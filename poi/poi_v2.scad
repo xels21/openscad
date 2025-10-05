@@ -102,7 +102,8 @@ led_z_plus = 2;
 led_z_x_plus = 5;
 
 // protector_top();
-protector_middle();
+// protector_middle();
+protector_bottom();
 
 // translate([20,0,-length / 3]) 
 // rotate([0,-90,0])
@@ -152,8 +153,27 @@ module protector_middle() {
 }
 
 module protector_bottom() {
+  b_plus = 3;
+
+
   linear_extrude(height=length / 3)
   protector_2d();
+
+  difference(){
+    rotate_extrude($fn=res) {
+      translate([b_plus/2+outer_d/2,0,0]) 
+      difference() {
+        rounded_square([2*b_plus,b_plus], center=true, r=1);
+        translate([0,b_plus/2,0]) 
+        square([2*b_plus,b_plus],center=true);
+      }
+    }
+
+    // translate([0,0,-b_plus]) 
+    // linear_extrude(height = b_plus) 
+    // offset(.5) //prev 0.3 -> 0.6
+    // tube_raw_pos_both_leds_2d();
+  }
 }
 
 
@@ -479,14 +499,18 @@ module tube_raw_pos_2d() {
     union() {
       circle(d=outer_d, $fn=res);
 
-      translate([-outer_d / 2, 0, 0])
-        rotate([0, 0, 90])
-          led_pos_2d();
-
-      translate([outer_d / 2, 0, 0])
-        rotate([0, 0, -90])
-          led_pos_2d();
+      tube_raw_pos_both_leds_2d();
     }
+}
+
+module tube_raw_pos_both_leds_2d() {
+    translate([-outer_d / 2, 0, 0])
+    rotate([0, 0, 90])
+      led_pos_2d();
+
+  translate([outer_d / 2, 0, 0])
+    rotate([0, 0, -90])
+      led_pos_2d();
 }
 
 module tube_raw_pos() {
