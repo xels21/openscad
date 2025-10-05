@@ -82,7 +82,7 @@ screw_2_off_x = screw_1_off_x + 1.5 * screw_d_all + battery_x;
 screw_3_off_x = 195;
 
 switch_small_x = 5.4;
-switch_small_y = 3.1;
+switch_small_y = 3.5;
 
 switch_x = 20;
 switch_y = 6;
@@ -143,7 +143,7 @@ module protector_bottom() {
 module protector_2d(with_switch = false, with_string = false) {
   switch_z_neg = 2;
 
-  string_x=8;
+  string_x=9;
   string_h=4;
   difference() {
 
@@ -152,12 +152,12 @@ module protector_2d(with_switch = false, with_string = false) {
     // circle(d=30.5, $fn=res);
     // circle(d=34, $fn=res);
 
-    offset(.45) //prev 0.3 -> 0.6
+    offset(.5) //prev 0.3 -> 0.6
     tube_raw_pos_2d();
 
     if(with_switch){
       translate([0,outer_d/2]) 
-      square([switch_small_y+.4, switch_z_neg*2], center=true);
+      square([switch_small_y+2, switch_z_neg*3], center=true);
     }
 
     if(with_string){
