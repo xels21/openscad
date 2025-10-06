@@ -102,8 +102,8 @@ led_z_plus = 2;
 led_z_x_plus = 5;
 
 // protector_top();
-// protector_middle();
-protector_bottom();
+protector_middle();
+//protector_bottom();
 
 // translate([20,0,-length / 3]) 
 // rotate([0,-90,0])
@@ -136,7 +136,7 @@ module protector_top() {
 }
 
 module protector_middle() {
-  l = length / 4;
+  l = length / 6;
   s = 10;
   difference() {
     union() {
