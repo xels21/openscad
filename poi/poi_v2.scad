@@ -103,9 +103,9 @@ led_z_x_plus = 5;
 
 // protector_top();
 protector_middle();
-//protector_bottom();
+// protector_bottom();
 
-// translate([20,0,-length / 3]) 
+// translate([-10,0,-length / 3]) 
 // rotate([0,-90,0])
 // all(is_top=false);
 
@@ -137,18 +137,24 @@ module protector_top() {
 
 module protector_middle() {
   l = length / 6;
-  s = 10;
+  s = 14;
+  r = 4.9;
+  switch_meg_z_scale = 2;
   difference() {
     union() {
-        linear_extrude(height=l+switch_x/2)
+        // linear_extrude(height=l+switch_x/4)
+        linear_extrude(height=2*l)
         protector_2d(with_switch=true);
 
-        translate([0,0,l+switch_x/2]) 
-        linear_extrude(height=l-switch_x/2)
-        protector_2d(with_switch=false);
+        // translate([0,0,l+switch_x/4]) 
+        // linear_extrude(height=l-switch_x/4)
+        // protector_2d(with_switch=false);
     }
-    #translate([0,outer_d/2+s-4.5,l])
-    rounded_cube_yz([14,s,switch_x], center=true, r=4);
+    // #translate([0,outer_d/2+s-4.5,l])
+    #translate([0,outer_d/2+s-6.5,switch_x_off-2*l+switch_x/2])
+    scale([1,1,switch_meg_z_scale]) 
+    rounded_cube_yz([14,s,switch_x/switch_meg_z_scale], center=true, r=r);
+
   }
 }
 
@@ -180,8 +186,8 @@ module protector_bottom() {
 module protector_2d(with_switch = false, with_string = false) {
   switch_z_neg = 2;
 
-  string_x=9;
-  string_h=4;
+  string_x=8;
+  string_h=3.5;
   difference() {
 
     circle(d=outer_d + 9, $fn=res); //about 34mm
@@ -189,7 +195,7 @@ module protector_2d(with_switch = false, with_string = false) {
     // circle(d=30.5, $fn=res);
     // circle(d=34, $fn=res);
 
-    offset(.5) //prev 0.3 -> 0.6
+    offset(.7)
     tube_raw_pos_2d();
 
     if(with_switch){
