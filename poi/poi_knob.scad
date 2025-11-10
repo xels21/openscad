@@ -43,11 +43,12 @@ pin_hold_h = 3;
 
 button_pusher_d = 5;
 button_pusher_x = led_d + 4;
+pin_tol=.2;
 
 cut_tol = 0.4;
 
-translate([50, 0, 0])
-  poi_knob();
+// translate([50, 0, 0])
+  // poi_knob();
 poi_knob(w_led=true);
 
 // poi_knob_w_led();
@@ -58,7 +59,9 @@ module pin_hold() {
   linear_extrude(height=pin_hold_h)
     pin_hold_2d();
 }
-module pin_hold_2d() {
+module pin_hold_2d(tol=0) {
+  pin_hold_x = pin_hold_x + tol;
+  pin_hold_d = pin_hold_d + tol;
   intersection() {
     circle(d=led_d_max + 2 * pin_hold_d);
     translate([-pin_hold_x / 2, -(led_d_max + 2 * pin_hold_d) / 2])
@@ -66,9 +69,9 @@ module pin_hold_2d() {
   }
 }
 
-module pin_hold_2d_other_side() {
+module pin_hold_2d_other_side(tol=0) {
   // translate([0, pin_hold_x / 2])
-  square([led_d_max / 2 + pin_hold_d, pin_hold_x]);
+  square([led_d_max / 2 + pin_hold_d+tol, pin_hold_x+tol]);
 }
 
 module poi_knob_led() {
@@ -144,15 +147,15 @@ module poi_knob(w_led = false) {
       #translate([0, 0, all_h - led_h_max])
         #union() {
           linear_extrude(led_h_max)
-            pin_hold_2d();
+            pin_hold_2d(pin_tol);
 
           rotate([0, 0, 90-deg_length])
             union() {
               mirror([1, 0, 0])
                 rotate_extrude(-deg_length)
-                  pin_hold_2d_other_side();
+                  pin_hold_2d_other_side(pin_tol);
               rotate_extrude(deg_length)
-                pin_hold_2d_other_side();
+                pin_hold_2d_other_side(pin_tol);
             }
         }
       // translate([0,0,all_h-led_h_max])
@@ -161,7 +164,7 @@ module poi_knob(w_led = false) {
   }
 }
 module poi_knob_2d(w_led = false) {
-  knot_r = w_led ? led_d_max / 2 : knot_r;
+  knot_r = w_led ? led_d_max / 2+.2 : knot_r;
   difference() {
     complexRoundSquare(
       size=[all_r, all_h],
