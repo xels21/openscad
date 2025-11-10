@@ -11,7 +11,7 @@ include <../libs/MCAD/2Dshapes.scad>;
 */
 
 all_h = 24;
-all_d = 34;
+all_d = 38;
 all_r = all_d / 2;
 
 string_d = 7;
@@ -25,43 +25,60 @@ knot_h = all_h - string_h;
 // $fn=16;
 $fn = 128;
 
-// poi_knob();
-rotate([0, -90, 0])
-  poi_knob_led();
+led_d = 10;
+led_h = 5.4;
+led_switch_h = 6;
+led_h_top = 1.5;
+led_h_bottom = 1.5;
+led_r_plus = 4;
+
+led_h_max = led_h_top + led_h + led_h_bottom;
+led_d_max = led_d + led_r_plus * 2;
+
+pullout_helper = 3;
+
+pin_hold_d = 1;
+pin_hold_x = 3;
+pin_hold_h = 3;
+
+button_pusher_d = 5;
+button_pusher_x = led_d + 4;
+
+cut_tol = 0.4;
+
+translate([50, 0, 0])
+  poi_knob();
+poi_knob(w_led=true);
+
+// poi_knob_w_led();
+// rotate([0, -90, 0])
+// poi_knob_led();
+
+module pin_hold() {
+  linear_extrude(height=pin_hold_h)
+    pin_hold_2d();
+}
+module pin_hold_2d() {
+  intersection() {
+    circle(d=led_d_max + 2 * pin_hold_d);
+    translate([-pin_hold_x / 2, -(led_d_max + 2 * pin_hold_d) / 2])
+      square([pin_hold_x, led_d_max + 2 * pin_hold_d]);
+  }
+}
+
+module pin_hold_2d_other_side() {
+  // translate([0, pin_hold_x / 2])
+  square([led_d_max / 2 + pin_hold_d, pin_hold_x]);
+}
 
 module poi_knob_led() {
-  led_d = 10;
-  led_h = 5.4;
-  led_switch_h = 6;
-  led_h_top = 1.5;
-  led_h_bottom = 1.5;
-  led_r_plus = 4;
-
-  led_h_max = led_h_top + led_h + led_h_bottom;
-  led_d_max = led_d + led_r_plus * 2;
-
-  pullout_helper = 3;
-
-  pin_hold_d = 1;
-  pin_hold_x = 3;
-  pin_hold_h = 3;
-
-  button_pusher_d = 5;
-  button_pusher_x = led_d + 4;
-
-  cut_tol = 0.4;
 
   difference() {
     union() {
       cylinder(h=led_h_max, d=led_d_max);
 
       // PIN HOLD
-      linear_extrude(height=pin_hold_h)
-        intersection() {
-          circle(d=led_d_max + 2 * pin_hold_d);
-          translate([-pin_hold_x / 2, -(led_d_max + 2 * pin_hold_d) / 2])
-            square([pin_hold_x, led_d_max + 2 * pin_hold_d]);
-        }
+      pin_hold();
 
       // BUTTON PUSHER
       // translate([button_pusher_x/2-button_pusher_d/2,0,led_h_max]) 
@@ -117,12 +134,34 @@ module poi_knob_led() {
         }
 }
 
-module poi_knob() {
-  rotate_extrude() {
-    poi_knob_2d();
+module poi_knob(w_led = false) {
+  difference() {
+    rotate_extrude() {
+      poi_knob_2d(w_led=w_led);
+    }
+    if (w_led) {
+      deg_length=45;
+      #translate([0, 0, all_h - led_h_max])
+        #union() {
+          linear_extrude(led_h_max)
+            pin_hold_2d();
+
+          rotate([0, 0, 90-deg_length])
+            union() {
+              mirror([1, 0, 0])
+                rotate_extrude(-deg_length)
+                  pin_hold_2d_other_side();
+              rotate_extrude(deg_length)
+                pin_hold_2d_other_side();
+            }
+        }
+      // translate([0,0,all_h-led_h_max])
+      // poi_knob_led();
+    }
   }
 }
-module poi_knob_2d() {
+module poi_knob_2d(w_led = false) {
+  knot_r = w_led ? led_d_max / 2 : knot_r;
   difference() {
     complexRoundSquare(
       size=[all_r, all_h],
@@ -144,5 +183,6 @@ module poi_knob_2d() {
         center=false
       );
   }
-  %cylinder(h=all_h, d=all_d);
+  cylinder(h=all_h, d=all_d);
+  // %cylinder(h=all_h, d=all_d);
 }
