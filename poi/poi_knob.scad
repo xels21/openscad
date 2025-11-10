@@ -25,13 +25,50 @@ knot_h = all_h - string_h;
 // $fn=16;
 $fn=128;
 
-poi_knot();
-module poi_knot(){
+// poi_knob();
+poi_knob_led();
+
+
+module poi_knob_led(){
+  led_d=10;
+  led_h=6;
+  led_h_top = 2;
+  led_h_bottom = 3;
+  led_r_plus = 4;
+
+  led_h_max = led_h_top + led_h + led_h_bottom;
+  led_d_max = led_d + led_r_plus*2;
+
+  pullout_helper = 3;
+
+  difference(){
+    cylinder(h = led_h_max,d = led_d_max);
+
+    translate([0,0,led_h_bottom]) 
+    linear_extrude(height = led_h) 
+    union(){
+      circle(d = led_d);
+      translate([0,-led_d/2])
+      square(size = [led_d_max,led_d]);
+    }
+
+    linear_extrude(height = led_h+led_h_bottom) 
+    translate([-led_d/2,0])
+    union(){
+      circle(d = pullout_helper);
+      translate([0,-pullout_helper/2])
+      square(size = [led_d_max,pullout_helper]);
+    }
+  }
+
+}
+
+module poi_knob(){
   rotate_extrude() {
-    poi_knot_2d();
+    poi_knob_2d();
   }
 }
-module poi_knot_2d()
+module poi_knob_2d()
 {
     difference() {
       complexRoundSquare(size = [ all_r, all_h ],
