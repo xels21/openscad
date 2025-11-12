@@ -11,7 +11,7 @@ include <../libs/MCAD/2Dshapes.scad>;
 */
 
 all_h = 24;
-all_d = 38;
+all_d = 36;
 all_r = all_d / 2;
 
 string_d = 7;
@@ -43,7 +43,7 @@ pin_hold_h = 3;
 
 button_pusher_d = 5;
 button_pusher_x = led_d + 4;
-pin_tol=.2;
+pin_tol=.4;
 
 cut_tol = 0.4;
 
@@ -164,7 +164,7 @@ module poi_knob(w_led = false) {
   }
 }
 module poi_knob_2d(w_led = false) {
-  knot_r = w_led ? led_d_max / 2+.2 : knot_r;
+  knot_r = w_led ? led_d_max / 2+pin_tol : knot_r;
   difference() {
     complexRoundSquare(
       size=[all_r, all_h],
