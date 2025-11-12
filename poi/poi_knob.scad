@@ -46,7 +46,7 @@ button_pusher_x = led_d + 4;
 pin_d_tol=.4;
 pin_tol=.5;
 
-cut_tol = 0.4;
+cut_tol = 0.55;
 
 // translate([50, 0, 0])
   // poi_knob();
