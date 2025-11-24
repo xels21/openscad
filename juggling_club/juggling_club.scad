@@ -34,18 +34,18 @@ string_d = 6;
 
 mount_h = 8;
 stemp_depth = 2;
-r_mount=3;
+r_mount = 3;
 
 $fn = 64;
 
-juggling_club_mount();
+juggling_club_mount(dual_hole=true);
 // juggling_club_mount_2d();
 
-module juggling_club_mount() {
+module juggling_club_mount(dual_hole=true) {
   difference() {
     minkowskiOutsideRound(r_mount, $fn=24)
       linear_extrude(height=mount_h)
-        juggling_club_mount_2d();
+        juggling_club_mount_2d(dual_hole=dual_hole);
 
     translate([0, 0, mount_h - stemp_depth])for (i = [0:count]) {
       // ACTUAL HOLDER
@@ -56,21 +56,33 @@ module juggling_club_mount() {
           0,
         ]
       )
-        scale(1.15)
-        translate([0,0,h]) 
-        rotate([180,0,0])
-          juggling_club();
+        scale(1.1)
+          translate([0, 0, h])
+            rotate([180, 0, 0])
+              juggling_club(w_hole=false);
     }
   }
 }
 
-module juggling_club_mount_2d() {
+module juggling_club_mount_2d(dual_hole = dual_hole) {
 
   difference() {
     // BASE
     circle(d=inner_d_plus * offset_fac * 3.5, $fn=64);
     // STRING
-    circle(d=string_d, $fn=16);
+    if (dual_hole) {
+      rotate([0, 0, -30]) {
+        
+          rounded_square([1.8*string_d,string_d], r=string_d*.49, fn=8, center=true);
+        // translate([-string_d / 2, 0, 0])
+          // circle(d=string_d, $fn=8);
+        // translate([string_d / 2, 0, 0])
+          // circle(d=string_d, $fn=8);
+      }
+    } else {
+      //single_hole
+      circle(d=string_d, $fn=16);
+    }
     for (i = [0:count]) {
 
       // ACTUAL HOLDER
@@ -115,13 +127,13 @@ module juggling_club_mount_2d() {
   }
 }
 
-module juggling_club() {
+module juggling_club(w_hole = true) {
   rotate_extrude($fn=64) {
-    juggling_club_2d();
+    juggling_club_2d(w_hole=w_hole);
   }
 }
 
-module juggling_club_2d() {
+module juggling_club_2d(w_hole = true) {
   intersection() {
     square([outer_d, h]);
     difference() {
@@ -133,9 +145,11 @@ module juggling_club_2d() {
         translate([-helper, 0])
           rounded_sqare(x=outer_d / 2 + helper, y=h, r=r2, fn=10, center=false);
       }
-      translate([0, thickness])
-        square([inner_d / 2, h - thickness]);
-      square([1.5, thickness]);
+      if (w_hole) {
+        translate([0, thickness])
+          square([inner_d / 2, h - thickness]);
+        square([1.5, thickness]);
+      }
     }
   }
 }
