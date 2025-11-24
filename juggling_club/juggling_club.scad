@@ -28,12 +28,12 @@ helper_2 = 5;
 count = 3;
 offset_fac = 1.2;
 inner_d_plus = inner_d + 2;
-plugger_x = inner_d - 3;
+plugger_x = inner_d - 1;
 temp_fac = 0.6;
 string_d = 6;
 
 mount_h = 8;
-stemp_depth = 3;
+stemp_depth = 2;
 r_mount=3;
 
 $fn = 64;
@@ -56,7 +56,9 @@ module juggling_club_mount() {
           0,
         ]
       )
-        scale(1.2)
+        scale(1.15)
+        translate([0,0,h]) 
+        rotate([180,0,0])
           juggling_club();
     }
   }
@@ -97,7 +99,7 @@ module juggling_club_mount_2d() {
         rotate(( -i / count * 360))
           #union() {
             rotate(90)
-              square_different_y(size=[15, plugger_x], y_different=plugger_x + 6, y_off=5, center=true, do_left=true, do_left=false);
+              square_different_y(size=[15, plugger_x], y_different=plugger_x + 18, y_off=6, center=true, do_left=true, do_left=false);
           }
 
       // CIRCLE CUT OUT
