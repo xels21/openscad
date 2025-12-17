@@ -5,12 +5,13 @@ use <../libs/openscad_xels_lib/round.scad>;
 windows_outside_height = 15;
 windows_outside_t = 4;
 
-window_top_w = 17;
+window_top_w = 15; //version 1
+// window_top_w = 17; //version 2
 window_top_t = 6;
 
 windows_inside_t = 7;
 windows_inside_h = 30;
-windows_inside_h_trans = 15;
+windows_inside_h_trans = 10;
 
 string_d = 6;
 string_plus = 6;
