@@ -18,7 +18,8 @@ max_x=inner_d2+3*thickness;
 max_y=inner_d2+2*thickness;
 max_z=inner_h+thickness;
 
-$fn=64;
+// $fn=64;
+$fn=256;
 
 all();
 
