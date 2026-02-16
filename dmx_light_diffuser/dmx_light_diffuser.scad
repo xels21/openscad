@@ -4,14 +4,15 @@ d = 177;
 d_plus = 15;
 d_max = d + 2*d_plus;
 
-diff_t = 1.5;
+diff_t = 1;
 
 span = 1.8; //each side
 span_l = 30;
-span_t = 5;
+span_t = 3;
 
-span_r = 6;
+span_r = 5;
 
+error("d is not diameter if $fn=8 (octagon) -> needs to be fixed")
 
 rotate([0, 0, 45/2])
 linear_extrude(height=diff_t)
