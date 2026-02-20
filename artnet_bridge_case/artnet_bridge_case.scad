@@ -46,7 +46,7 @@ log(str("##########max_x: ", max_x));
 
 
 // all(with_ws2812=1);
-lid(tol_x=0.4, tol_y=0.8, tol_z=0.8, with_help=1);
+lid(tol_x=0.2, tol_y=0.4, tol_z=0.4, with_help=1);
 
 module all(with_ws2812=0) {
   difference(){
