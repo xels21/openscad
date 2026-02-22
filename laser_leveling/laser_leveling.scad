@@ -10,42 +10,57 @@ holder_insert_h=holder_insert_h_raw + t;
 
 holder_rot_n=8;
 
-  d_raw = (holder_h+t);
-  d = (d_raw)*1.08;
+d_raw = (holder_h+t);
+d = (d_raw)*1.08;
 
 inner_d = 12;
 inner_d_tol=0.4;
 
-dmx_cut_d=34;
+dmx_cut_d=30;
 dmx_x_off=33;
 dmx_y_off=20;
 
 leg_t=8;
 
-// box();
-// translate([laser_x,0,0])
-leg(is_side_x=false);
-translate([laser_x/2,0,0])
+holder_xy_off=d_raw/2;
+holder_x_gap = t+laser_x+t-2*holder_xy_off;
+holder_y_gap = t+laser_y+t-2*holder_xy_off;
+
+box();
+translate([holder_xy_off+holder_x_gap,-20,0])
+leg(is_side_x=true);
+translate([holder_xy_off,-20,0])
+rotate([0,0,180])
+leg(is_side_x=true);
+
+!rotate([90,0,0])
 leg(is_side_x=false);
 
 module leg(is_side_x=true){
+  w=inner_d-inner_d_tol;
+  leg_gap=1;
+  
   // translate([t+dmx_x_off, t+laser_y, t+dmx_y_off])
   // rotate([90,0,0])
-  l = is_side_x ? laser_x/2-d_raw/2 : laser_y/2-d_raw/2;
-  translate([0,0,leg_t])
-  cylinder(h=holder_insert_h,d=inner_d-inner_d_tol,$fn=holder_rot_n, center=false);
+  l = is_side_x ? holder_x_gap/2-leg_gap : holder_y_gap/2-leg_gap;
+  // translate([0,0,leg_t])
+  rotate([0,0,360/holder_rot_n/2,0])
+  cylinder(h=holder_insert_h+leg_t,d=w,$fn=holder_rot_n, center=false);
   
+  w_adj = w*.925;
   linear_extrude(height=leg_t)
-  translate([-l/2+leg_t,0,0])
-  offset(leg_t*.99)
-  offset(-leg_t*.99)
-  square([l,leg_t*2], center=true);
+  // translate([-l/2+w_adj/2,0,0])
+  translate([-l,0,0])
+  translate([0,-w_adj/2,0])
+  offset(w_adj*.49)
+  offset(-w_adj*.49)
+  square([l+w_adj/2,w_adj], center=false);
 }
 
 module box(){
 difference(){
   union(){
-    bow_raw();
+    box_raw();
     holder_insert(side=0);
     holder_insert(side=1);
     holder_insert(side=2);
@@ -74,38 +89,38 @@ difference(){
 
 module holder_insert(side=0, is_inner=0){
   if(side==0){
-    translate([d_raw/2, t, 0])
+    translate([holder_xy_off, t, 0])
     holder_insert_raw(is_inner);
   }
   if(side==1){
-    translate([laser_x , t, 0])
+    translate([holder_xy_off+holder_x_gap , t, 0])
     holder_insert_raw(is_inner);
   }
   if(side==2){
-    translate([d_raw/2, laser_y+holder_insert_h+t, 0])
+    translate([holder_xy_off, laser_y+holder_insert_h+t, 0])
     holder_insert_raw(is_inner);
   }
   if(side==3){
-    translate([laser_x, laser_y+holder_insert_h+t, 0])
+    translate([holder_xy_off+holder_x_gap, laser_y+holder_insert_h+t, 0])
     holder_insert_raw(is_inner);
   }
   if(side==4){
-    translate([t, d/2, 0])
+    translate([t, d_raw/2, 0])
     rotate([0,0,-90])
     holder_insert_raw(is_inner);
   }
   if(side==5){
-    translate([t+laser_x, d/2, 0])
+    translate([t+laser_x, d_raw/2, 0])
     rotate([0,0,90])
     holder_insert_raw(is_inner);
   }
   if(side==6){
-    translate([t, laser_y, 0])
+    translate([t, holder_y_gap + holder_xy_off, 0])
     rotate([0,0,-90])
     holder_insert_raw(is_inner);
   }
   if(side==7){
-    translate([t+laser_x, laser_y, 0])
+    translate([t+laser_x, holder_y_gap + holder_xy_off, 0])
     rotate([0,0,90])
     holder_insert_raw(is_inner);
   }
@@ -122,7 +137,7 @@ module holder_insert_raw(is_inner=0){
   }
 }
 
-module bow_raw(){
+module box_raw(){
   difference(){
     outer_box();
     translate([t,t,t])
