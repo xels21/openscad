@@ -42,7 +42,7 @@ electro_hold_h=heat_gap_h;
 electro_hold_w=3;
 
 max_electro_x_w_arms = electro_x_outer+2*electro_hold_w;
-max_electro_y_w_arms = electro_y_outer+electro_hold_w+plate_border_t;
+max_electro_y_w_arms = electro_y_outer+electro_hold_w;
 
 // tol_fac=1.05;
 // tol_fac=1.1;
@@ -62,7 +62,7 @@ difference(){
     // translate([(max_inner_x/2 - (electro_x_outer/2)*tol_fac), 0, 0])
     // scale(tol_fac)
     translate([(max_inner_x/2 - (electro_x_outer/2)), 0, 0])
-    electro_outer();
+    #electro_outer();
 }
 
 module plate_border(){
