@@ -26,26 +26,29 @@ holder_xy_off=d_raw/2;
 holder_x_gap = t+laser_x+t-2*holder_xy_off;
 holder_y_gap = t+laser_y+t-2*holder_xy_off;
 
-box();
-translate([holder_xy_off+holder_x_gap,-20,0])
-leg(is_side_x=true);
-translate([holder_xy_off,-20,0])
-rotate([0,0,180])
-leg(is_side_x=true);
+// box();
+// translate([holder_xy_off+holder_x_gap,-20,0])
+// leg(is_side_x=true);
+// translate([holder_xy_off,-20,0])
+// rotate([0,0,180])
+// leg(is_side_x=true);
 
-!rotate([90,0,0])
+// rotate([90,0,0])
 leg(is_side_x=false);
+translate([0,-20,0])
+leg(is_side_x=true);
 
 module leg(is_side_x=true){
-  w=inner_d-inner_d_tol;
   leg_gap=1;
+  leg_plus=.8;
+  w=inner_d-inner_d_tol+leg_plus;
   
   // translate([t+dmx_x_off, t+laser_y, t+dmx_y_off])
   // rotate([90,0,0])
   l = is_side_x ? holder_x_gap/2-leg_gap : holder_y_gap/2-leg_gap;
   // translate([0,0,leg_t])
-  rotate([0,0,360/holder_rot_n/2,0])
-  cylinder(h=holder_insert_h+leg_t,d=w,$fn=holder_rot_n, center=false);
+  #rotate([0,0,360/holder_rot_n/2,0])
+  cylinder(h=holder_insert_h+leg_t,d1=w, d2=w-leg_plus,$fn=holder_rot_n, center=false);
   
   w_adj = w*.925;
   linear_extrude(height=leg_t)
