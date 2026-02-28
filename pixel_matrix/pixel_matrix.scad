@@ -52,17 +52,44 @@ echo("####################");
 echo("max_inner_x: ", max_inner_x);
 echo("####################");
 
-difference(){
-    union(){
-      plate();
+// translate([30,0,3])
+diffuser();
+// case();
 
-      plate_border();
+module diffuser(){
+  // diffuser_h=plate_border_h-heat_gap_h-plate_t;
+  diffuser_t=1.5;
+  diffuser_h_tol=.5;
+  led_h=2.5;
+  diffuser_element_h=plate_border_h-heat_gap_h-plate_t-diffuser_t-led_h-diffuser_h_tol;
+  cylinder_correction_fac=1.4145;
+  echo("diffuser_h: ", diffuser_element_h);
+  cube([max_inner_x, max_inner_y, diffuser_t]);
+  translate([pixel_element_xy/2, pixel_element_xy/2, 0 ])
+  for(r=[0:pixel_rows-1]){
+    for(c=[0:pixel_columns-1]){
+      translate([c*pixel_element_xy, r*pixel_element_xy, 0])
+      rotate([0,0,45])
+      translate([0,0,diffuser_t])
+      scale([cylinder_correction_fac,cylinder_correction_fac,1])
+      cylinder(d1=pixel_element_xy,d2=pixel_size_xy,h=diffuser_element_h,$fn=4);
     }
-    
-    // translate([(max_inner_x/2 - (electro_x_outer/2)*tol_fac), 0, 0])
-    // scale(tol_fac)
-    translate([(max_inner_x/2 - (electro_x_outer/2)), 0, 0])
-    #electro_outer();
+  }
+}
+
+module case(){
+  difference(){
+      union(){
+        plate();
+
+        plate_border();
+      }
+
+      // translate([(max_inner_x/2 - (electro_x_outer/2)*tol_fac), 0, 0])
+      // scale(tol_fac)
+      translate([(max_inner_x/2 - (electro_x_outer/2)), 0, 0])
+      #electro_outer();
+  }
 }
 
 module plate_border(){
