@@ -8,11 +8,12 @@ pixel_gap_xy = 5;
 pixel_element_xy = pixel_size_xy + pixel_gap_xy;
 
 padding = pixel_gap_xy/2;
+max_tol = .4;
 
-max_inner_led_x =  pixel_columns*pixel_element_xy-pixel_gap_xy;
+max_inner_led_x =  pixel_columns*pixel_element_xy-pixel_gap_xy+max_tol;
 max_inner_x = 2*padding + max_inner_led_x;
 
-max_inner_led_y =  pixel_rows*pixel_element_xy-pixel_gap_xy;
+max_inner_led_y =  pixel_rows*pixel_element_xy-pixel_gap_xy+max_tol;
 max_inner_y = 2*padding + max_inner_led_y;
 
 heat_gap_count_x = 4;
@@ -25,7 +26,7 @@ heat_gap_r = min(2, heat_gap_h*.99);
 plate_t=1;
 
 plate_border_t=2;
-plate_border_h=10;
+plate_border_h=11;
 
 electro_t=2;
 
@@ -33,10 +34,12 @@ electro_x_inner=110;
 electro_x_outer=electro_x_inner+2*electro_t;
 electro_y_inner=47;
 electro_y_outer=electro_y_inner+electro_t+plate_border_t;
-electro_w_inner=27;
+// electro_w_inner=27;
+electro_w_inner=28;
 electro_w_outer=electro_w_inner+electro_t;
 // electro_r=0;
-electro_r=10;
+electro_r=4;
+// electro_r=10;
 
 electro_hold_h=heat_gap_h;
 electro_hold_w=3;
@@ -59,12 +62,25 @@ switch_small_y = 3.5;
 // switch_x_off=120;
 switch_x_off = 0;//screw_2_off_x + screw_d_all / 2 + 1;
 
-esp_x=23+1;
-esp_y=5.5;
-esp_z=18+1;
+esp_x=55+1;
+esp_y=13+1;
+esp_z=28;//+1;
 esp_t=2;
 
 esp_x_max = esp_x + esp_t + electro_t;
+
+
+bat_x = 67;
+bat_d = 19 + .5;
+
+charger_x=28+1;
+charger_y=5.5;
+charger_z=18+1;
+charger_t=2;
+
+charger_x_max = charger_x + charger_t + electro_t;
+
+switch_off_fac=.3;
 
 wall_off=41;
 
@@ -77,8 +93,8 @@ echo("####################");
 
 // translate([30,0,3])
 // diffuser();
-// case();
-electronic_case();
+case();
+// electronic_case();
 
 module electronic_case(){
   difference(){
@@ -88,27 +104,59 @@ module electronic_case(){
         electro_outer(outer=false);
 
         // USB CHARGER LEFT SIDE
-        translate([0,electro_y_inner/2,-electro_w_inner/2])
-        #rounded_cube_y([2*electro_t, 20, 10], r=4, center=true);
+        // translate([0,electro_y_inner/2,-electro_w_inner/2])
+        // #rounded_cube_y([2*electro_t, 20, 10], r=4, center=true);
 
       }
-      // ESP RIGHT
-      translate([2*electro_t + electro_x_inner - esp_x_max, 0,-electro_w_inner-electro_t])
-      esp_pos(center=false);
+      // CHARGER RIGHT PLUS
+      translate([2*electro_t + electro_x_inner - charger_x_max, 0,-electro_w_inner-electro_t])
+      charger_pos(center=false);
 
-      translate([(electro_x_outer)/2,electro_y_outer-switch_y*.958+electro_t,-electro_w_outer/2])
-      rotate([90,0,0])
+
+      // ESP RIGHT PLUS
+      translate([2*electro_t + electro_x_inner - esp_x_max, bat_d+esp_t*1,-electro_w_inner-electro_t])
+      rounded_cube_x([esp_x_max, esp_y+2*esp_t, esp_z+esp_t], r=4);
+
+      // SWITCH
+      #translate([electro_x_outer-switch_z/2,electro_y_outer*switch_off_fac,electro_w_outer*-.35])
+      rotate([90,90,90])
       switch_pos(center=true);
 
-      translate([electro_t+wall_off,0,-electro_w_inner])
-      rounded_cube_y([electro_t,electro_y_inner,electro_w_inner-8],r=4, center=false);
-    }
-    // ESP RIGHT
-    translate([2*electro_t + electro_x_inner - esp_x_max, 0,-electro_w_inner-electro_t])
-    esp_neg(center=false);
+      // Battery
+      translate([electro_x_inner-bat_x-charger_x-electro_t,0,-electro_w_inner])
+      difference(){
+        cube([bat_x+2*esp_t, bat_d+2*esp_t, bat_d*.66], center=false);
+        translate([esp_t,esp_t,0])
+        rounded_cube_y([bat_x, bat_d, 2*bat_d], r=bat_d*.499, $fn=32, center=false);
+      }
 
-    translate([(electro_x_outer)/2,electro_y_outer-switch_y*.958+electro_t,-electro_w_outer/2])
-    rotate([90,0,0])
+      //  SEPERATOR
+      // translate([electro_t+wall_off,0,-electro_w_inner])
+      // rounded_cube_y([electro_t,electro_y_inner,electro_w_inner-8],r=3, center=false);
+    }
+    // CHARGER RIGHT NEG
+    #translate([2*electro_t + electro_x_inner - charger_x_max + electro_t, esp_t*1,-electro_w_inner])
+    difference(){
+      rounded_cube_y([charger_x+electro_t, charger_y, charger_z+2], r=2);
+      translate([charger_x, 0, 0])
+      #cube([charger_t,charger_y,charger_z*.3]);
+    }
+
+
+    // ESP RIGHT NEG
+    // #translate([2*electro_t + electro_x_inner - esp_x_max, bat_d+esp_t*1,-electro_w_inner-electro_t])
+    #translate([2*electro_t + electro_x_inner - esp_x_max + electro_t, bat_d+esp_t*2,-electro_w_inner])
+    difference(){
+      rounded_cube_y([esp_x+electro_t, esp_y, esp_z+2], r=2);
+      translate([esp_x, 0, 0])
+      #cube([esp_t,esp_y,esp_z*.3]);
+    }
+
+    // esp_neg(center=false);
+
+    // SWITCH NEG
+    translate([electro_x_outer-switch_z/2,electro_y_outer*switch_off_fac,electro_w_outer*-.35])
+    rotate([90,90,90])
     switch_neg(center=true);
   }
 }
@@ -116,11 +164,26 @@ module electronic_case(){
 
 
 // !esp();
-module esp(center=false){
-  difference() {
-    esp_pos(center=center);
-    #esp_neg(center=center);
-  }
+// module esp(center=false){
+//   difference() {
+//     esp_pos(center=center);
+//     #esp_neg(center=center);
+//   }
+// }
+
+module charger_pos(center=center){
+  z_corr = center?-charger_t/2:0;
+  translate([0, 0, z_corr])
+  rounded_cube_x([charger_x_max, charger_y+2*charger_t, charger_z+charger_t], r=4, center=center);
+}
+module charger_neg(center=center, r=2){
+  z_off=4;
+
+  z_corr = center? max(r/2,z_off): max(r/2,z_off)+charger_t;
+  x_off=center?electro_t/2:electro_t;
+  y_off=center?0:charger_t;
+  translate([x_off, y_off, z_corr])
+  rounded_cube_y([charger_x+electro_t, charger_y, charger_z+r-z_off], r=r, center=center);
 }
 
 module esp_pos(center=center){
@@ -131,7 +194,7 @@ module esp_pos(center=center){
 
 }
 module esp_neg(center=center, r=2){
-  z_off=4;
+  z_off=8;
 
   z_corr = center? max(r/2,z_off): max(r/2,z_off)+esp_t;
   x_off=center?electro_t/2:electro_t;
@@ -201,16 +264,51 @@ module case(){
       // translate([(max_inner_x/2 - (electro_x_outer/2)*tol_fac), 0, 0])
       // scale(tol_fac)
       translate([(max_inner_x/2 - (electro_x_outer/2)), 0, 0])
-      #electro_outer();
+      #electro_outer(xy_fac=1, z_fac=1);
   }
 }
 
 module plate_border(){
+  border_holder_h = .6;
+  border_holder_w = 10;
   linear_extrude(height=plate_border_h)
   difference(){
     translate([-plate_border_t, -plate_border_t, 0])
     square([max_inner_x+2*plate_border_t, max_inner_y+2*plate_border_t]);
     square([max_inner_x, max_inner_y]);
+  }
+
+  translate([0,0,plate_border_h])
+  intersection(){
+    union(){
+      translate([0,max_inner_y/2-(border_holder_w/2),-border_holder_h])
+      cube([max_inner_x, border_holder_w, border_holder_h]);
+
+      translate([max_inner_x/2-(border_holder_w/2),0,-border_holder_h])
+      cube([border_holder_w, max_inner_y, border_holder_h]);
+    }
+
+
+    // translate([0,0,border_holder_h])
+    union(){
+      // LEFT
+      rotate([-90,0,0])
+      cylinder(h=max_inner_y, r=border_holder_h, $fn=4);
+
+      // RIGHT
+      translate([max_inner_x, 0, 0])
+      rotate([-90,0,0])
+      cylinder(h=max_inner_y, r=border_holder_h, $fn=4);
+
+      // BOTTOM
+      rotate([0,90,0])
+      cylinder(h=max_inner_x, r=border_holder_h, $fn=4);
+
+      // TOP
+      translate([0, max_inner_y, 0])
+      rotate([0,90,0])
+      cylinder(h=max_inner_x, r=border_holder_h, $fn=4);
+    }
   }
 }
 
@@ -247,9 +345,9 @@ module plate(){
 //   }
 // }
 
-module electro_outer(outer=true, fac=.985){
-  translate([((1-fac)*max_electro_x_w_arms)/2,0,0])
-  scale([fac,fac,fac])
+module electro_outer(outer=true, xy_fac=.99, z_fac=.9){
+  translate([((1-xy_fac)*max_electro_x_w_arms)/2,0,0])
+  scale([xy_fac,xy_fac,z_fac])
   if(outer){
     translate([0,0, plate_t])
     intersection(){
