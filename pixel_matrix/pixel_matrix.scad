@@ -84,6 +84,9 @@ switch_off_fac=.3;
 
 wall_off=41;
 
+usb_c_x=10 + .2;
+usb_c_y= 4 + .2;
+
 res=16;
 
 echo("####################");
@@ -93,8 +96,30 @@ echo("####################");
 
 // translate([30,0,3])
 // diffuser();
-case();
-// electronic_case();
+// case();
+electronic_case();
+// usb_padding();
+
+module usb_padding(){
+
+
+
+  plus = 2;
+
+  usbc_r1=1.5;
+  usbc_r2=2;
+
+  linear_extrude(height=2)
+  difference(){
+    offset(usbc_r2, $fn=32)
+    offset(-usbc_r2)
+    square([usb_c_x+2*plus, usb_c_y+2*plus], center=true);
+
+    offset(usbc_r1, $fn=32)
+    offset(-usbc_r1)
+    #square([usb_c_x, usb_c_y], center=true);
+  }
+}
 
 module electronic_case(){
   difference(){
@@ -145,11 +170,22 @@ module electronic_case(){
 
     // ESP RIGHT NEG
     // #translate([2*electro_t + electro_x_inner - esp_x_max, bat_d+esp_t*1,-electro_w_inner-electro_t])
-    #translate([2*electro_t + electro_x_inner - esp_x_max + electro_t, bat_d+esp_t*2,-electro_w_inner])
+    translate([2*electro_t + electro_x_inner - esp_x_max + electro_t, bat_d+esp_t*2,-electro_w_inner])
     difference(){
       rounded_cube_y([esp_x+electro_t, esp_y, esp_z+2], r=2);
       translate([esp_x, 0, 0])
-      #cube([esp_t,esp_y,esp_z*.3]);
+      difference(){
+        cube([esp_t,esp_y,esp_z+10]);
+        #translate([0,esp_y-usb_c_y,esp_z*.3])
+        // !cube([esp_t, usb_c_y, usb_c_x]);
+        mirror([1,0,0])
+        rotate([0,-90,0])
+        linear_extrude(height=esp_t)
+        offset(.99,$fn=16)
+        offset(-.99)
+        square([usb_c_x, usb_c_y]);
+      }
+      // #cube([esp_t,esp_y,esp_z*.3]);
     }
 
     // esp_neg(center=false);
