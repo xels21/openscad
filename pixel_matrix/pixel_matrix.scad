@@ -269,7 +269,7 @@ module case(){
 }
 
 module plate_border(){
-  border_holder_h = .6;
+  border_holder_h = 1;
   border_holder_w = 10;
   linear_extrude(height=plate_border_h)
   difference(){
@@ -281,13 +281,28 @@ module plate_border(){
   translate([0,0,plate_border_h])
   intersection(){
     union(){
+      // CENTER Y
       translate([0,max_inner_y/2-(border_holder_w/2),-border_holder_h])
       cube([max_inner_x, border_holder_w, border_holder_h]);
-
-      translate([max_inner_x/2-(border_holder_w/2),0,-border_holder_h])
-      cube([border_holder_w, max_inner_y, border_holder_h]);
+      // BOTTOM Y
+      translate([0,0,-border_holder_h])
+      cube([max_inner_x, border_holder_w, border_holder_h]);
+      // TOP Y
+      translate([0,max_inner_y-(border_holder_w),-border_holder_h])
+      cube([max_inner_x, border_holder_w, border_holder_h]);
     }
 
+    union(){
+      // LEFT X
+      translate([0,0,-border_holder_h])
+      cube([border_holder_w, max_inner_y, border_holder_h]);
+      // CENTER X
+      translate([max_inner_x/2-(border_holder_w/2),0,-border_holder_h])
+      cube([border_holder_w, max_inner_y, border_holder_h]);
+      // RIGHT X
+      translate([max_inner_x-border_holder_w,0,-border_holder_h])
+      cube([border_holder_w, max_inner_y, border_holder_h]);
+    }
 
     // translate([0,0,border_holder_h])
     union(){
