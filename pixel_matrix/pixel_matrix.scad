@@ -1,4 +1,5 @@
 use <../libs/openscad_xels_lib/round.scad>;
+use <../libs/openscad_xels_lib/cylinder.scad>;
 
 pixel_rows = 16;
 pixel_columns = 16;
@@ -27,6 +28,8 @@ plate_t=1;
 
 plate_border_t=2;
 plate_border_h=11;
+
+diffuser_h_neg=1;
 
 electro_t=2;
 
@@ -95,9 +98,9 @@ echo("####################");
 
 
 // translate([30,0,3])
-// diffuser();
+diffuser();
 // case();
-electronic_case();
+// electronic_case();
 // usb_padding();
 
 module usb_padding(){
@@ -270,13 +273,14 @@ module switch_neg(center=false) {
 
 module diffuser(){
   // diffuser_h=plate_border_h-heat_gap_h-plate_t;
-  diffuser_t=1.5;
+  diffuser_t=1;
   diffuser_h_tol=.5;
   led_h=2.5;
-  diffuser_element_h=plate_border_h-heat_gap_h-plate_t-diffuser_t-led_h-diffuser_h_tol;
+  diffuser_element_h=plate_border_h-heat_gap_h-plate_t-diffuser_t-led_h-diffuser_h_tol-diffuser_h_neg;
   cylinder_correction_fac=1.4145;
   echo("diffuser_h: ", diffuser_element_h);
-  cube([max_inner_x, max_inner_y, diffuser_t]);
+  // cube([max_inner_x, max_inner_y, diffuser_t]);
+  cube([pixel_rows*pixel_element_xy, pixel_columns*pixel_element_xy, diffuser_t]);
   translate([pixel_element_xy/2, pixel_element_xy/2, 0 ])
   for(r=[0:pixel_rows-1]){
     for(c=[0:pixel_columns-1]){
@@ -284,7 +288,8 @@ module diffuser(){
       rotate([0,0,45])
       translate([0,0,diffuser_t])
       scale([cylinder_correction_fac,cylinder_correction_fac,1])
-      cylinder(d1=pixel_element_xy,d2=pixel_size_xy,h=diffuser_element_h,$fn=4);
+      // cylinder(d1=pixel_element_xy,d2=pixel_size_xy,h=diffuser_element_h,$fn=4);
+      cylinder_xels(d1=pixel_element_xy,d2=pixel_size_xy,d2_fac=.7,h=diffuser_element_h,fn1=4, fn2=64);
     }
   }
 }
