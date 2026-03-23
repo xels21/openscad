@@ -98,16 +98,31 @@ echo("####################");
 
 
 // translate([30,0,3])
-diffuser();
+// diffuser();
 // case();
 // electronic_case();
-// usb_padding();
+usb_padding();
+// temp_correction();
+
+module temp_correction(){
+  x_temp = 18.7;
+  y_temp = 14;
+
+  linear_extrude(height=3)
+    difference(){
+      square([x_temp, y_temp]);
+      square([usb_c_x, usb_c_y]);
+    }
+}
 
 module usb_padding(){
 
+  usb_c_x_exact=9 + .2;
+  usb_c_y_exact=3.2 + 0;
 
-
-  plus = 2;
+  y_target = 5.6;
+  plus_x = 2.4;
+  plus_y = (y_target-usb_c_y_exact)/2;
 
   usbc_r1=1.5;
   usbc_r2=2;
@@ -116,11 +131,11 @@ module usb_padding(){
   difference(){
     offset(usbc_r2, $fn=32)
     offset(-usbc_r2)
-    square([usb_c_x+2*plus, usb_c_y+2*plus], center=true);
+    square([usb_c_x_exact+2*plus_x, usb_c_y_exact+2*plus_y], center=true);
 
     offset(usbc_r1, $fn=32)
     offset(-usbc_r1)
-    #square([usb_c_x, usb_c_y], center=true);
+    #square([usb_c_x_exact, usb_c_y_exact], center=true);
   }
 }
 
@@ -273,7 +288,7 @@ module switch_neg(center=false) {
 
 module diffuser(){
   // diffuser_h=plate_border_h-heat_gap_h-plate_t;
-  diffuser_t=1;
+  diffuser_t=.6;
   diffuser_h_tol=.5;
   led_h=2.5;
   diffuser_element_h=plate_border_h-heat_gap_h-plate_t-diffuser_t-led_h-diffuser_h_tol-diffuser_h_neg;
