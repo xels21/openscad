@@ -13,6 +13,7 @@ normed_z=15;
 
 
 
+
 card_xy=50;
 card_t=1;
 card_r=2;
@@ -33,8 +34,8 @@ box_z=card_xy+box_z_plus+card_border_w;
 card_holder=2;
 
 // card();
-// emblem();
-box();
+emblem();
+// box();
 
 
 module box(){
@@ -57,20 +58,22 @@ module box(){
 }
 
 module emblem() {
+  // cutoff=6;
+  cutoff=2;
   intersection(){
     cube([100,100,100]);
-    translate([0,0,-6])
+    translate([0,0,-cutoff])
     translate([card_border_w+margin,card_border_w+margin,0])
     // translate([0,0,card_t])
-    scale([(card_xy-2*card_border_w-2*margin)/normed_xy,(card_xy-2*card_border_w-2*margin)/normed_xy,(emblem_t+6)/normed_z ])
+    scale([(card_xy-2*card_border_w-2*margin)/normed_xy,(card_xy-2*card_border_w-2*margin)/normed_xy,(emblem_t+cutoff)/normed_z ])
     
     // Diamond_I();
     // Diamond_II();
     // Diamond_III();
     // Champion_I();
     // Champion_II();
-    // translate([0,0,4])
-    Champion_III();
+    // #translate([0,0,4])
+    #Champion_III();
   }
 }
 
