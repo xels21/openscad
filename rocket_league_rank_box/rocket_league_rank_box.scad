@@ -20,17 +20,21 @@ card_border_t=2;
 card_border_w=2;
 margin=1;
 
-box_xy_plus=1;
+emblem_t=5;
+
+box_x_plus=1;
 box_z_plus=1;
 box_t=2;
-box_xy=card_xy+box_xy_plus+2*card_border_w;
+box_x=card_xy+box_x_plus+2*box_t;
+// box_y=5*(6/*card*/);
+box_y=box_t + card_border_t + box_t+box_t+ 5*(emblem_t+card_border_t) +2;
 box_z=card_xy+box_z_plus+card_border_w;
 
 card_holder=2;
 
 // card();
-emblem();
-// box();
+// emblem();
+box();
 
 
 module box(){
@@ -38,33 +42,35 @@ module box(){
     linear_extrude(height=box_z)
     offset(1, $fn=32)
     offset(-1)
-    square([box_xy,box_xy]);
+    square([box_x,box_y]);
 
     #translate([box_t,box_t,box_t])
-    cube([card_xy+box_xy_plus,card_border_t+.5,card_xy+box_z_plus]);
+    cube([card_xy+box_x_plus,card_border_t+.5,card_xy+box_z_plus]);
 
     translate([box_t+card_holder,0,box_t+card_holder])
-    cube([card_xy+box_xy_plus-2*card_holder,card_border_t,card_xy+box_z_plus-card_holder]);
+    cube([card_xy+box_x_plus-2*card_holder,card_border_t,card_xy+box_z_plus-card_holder]);
 
 
     translate([box_t,box_t+card_border_t+box_t,box_t])
-    cube([card_xy+box_xy_plus,box_xy-(box_t+box_t+card_border_t+box_t),card_xy+box_z_plus]);
+    #cube([card_xy+box_x_plus,box_y-(box_t+box_t+card_border_t+box_t),card_xy+box_z_plus]);
   }
 }
 
 module emblem() {
   intersection(){
-    // translate([card_border_w+margin,card_border_w+margin,0])
-    // translate([0,0,card_t])
     cube([100,100,100]);
-    translate([0,0,-1])
-    scale([(card_xy-2*card_border_w-2*margin)/normed_xy,(card_xy-2*card_border_w-2*margin)/normed_xy,(5+1)/normed_z ])
-    // #Diamond_I();
-    // #Diamond_II();
-    // #Diamond_III();
-    Champion_I();
-    // #Champion_II();
-    // #Champion_III();
+    translate([0,0,-6])
+    translate([card_border_w+margin,card_border_w+margin,0])
+    // translate([0,0,card_t])
+    scale([(card_xy-2*card_border_w-2*margin)/normed_xy,(card_xy-2*card_border_w-2*margin)/normed_xy,(emblem_t+6)/normed_z ])
+    
+    // Diamond_I();
+    // Diamond_II();
+    // Diamond_III();
+    // Champion_I();
+    // Champion_II();
+    // translate([0,0,4])
+    Champion_III();
   }
 }
 
