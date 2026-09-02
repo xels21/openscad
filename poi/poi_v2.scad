@@ -52,8 +52,8 @@ screw_h = 2.2;
 screw_y_cut = 4; //cable
 screw_y = inner_d - 2 * screw_y_cut;
 
-converter_x = 23;
-converter_y = 12;
+converter_x = 36.5;
+converter_y = 17;
 
 uC_x = 23.2; //w/usb
 // uC_y=12; //w/pins
@@ -91,7 +91,7 @@ switch_screw_out_off_x = 2.5;
 switch_screw_d = 1.5;
 
 // switch_x_off=120;
-switch_x_off = screw_2_off_x + screw_d_all / 2 + 1;
+switch_x_off = screw_2_off_x + screw_d_all / 2 +.2;
 // switch_x_off=length/2-switch_x/2;
 
 led_x = 5.5;
@@ -102,12 +102,13 @@ led_z_plus = 2;
 led_z_x_plus = 5;
 
 // protector_top();
-protector_middle();
+// protector_middle();
 // protector_bottom();
 
 // translate([-10,0,-length / 3]) 
 // rotate([0,-90,0])
 // all(is_top=false);
+all(is_top=true);
 
 // all(is_top=true);
 // tube_raw_pos();
@@ -361,7 +362,7 @@ module all(is_top = false) {
         screw_3(is_pos=true);
 
         switch_pos();
-        translate([switch_x_off + switch_x + 1, thickness + screw_y_cut, 0])
+        translate([switch_x_off + switch_x +.2, thickness + screw_y_cut, 0])
           cube([3, inner_d - 2 * screw_y_cut, inner_d]);
         %converter();
       }
@@ -402,7 +403,7 @@ module battery_neg() {
 }
 
 module converter() {
-  translate([switch_x_off + switch_x + 10, (outer_d - converter_y) / 2, 0])
+  translate([switch_x_off + switch_x +3, (outer_d - converter_y) / 2, 0])
     cube([converter_x, converter_y, 10]);
 }
 module screw_1(is_pos = true, both_sides = false) {

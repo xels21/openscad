@@ -19,6 +19,7 @@ h_sum = h1+h2;
 
 outer_d=125;
 inner_r=outer_d/2-h_sum;
+friction_gap_r=.05;
 
 b1=8;
 b2=8;
@@ -32,8 +33,13 @@ b_max_w_tri = b_max + 2*triangle_plus;
 tube_v1_off=1;
 tube_v1_d=3.2;
 
+res=256;
+
 // form_3d();
-form_3d_inner();
+// form_3d_inner();
+// form_3d_outer();
+form_3d_outer_diff();
+// triangle_3d();
 
 
 module form_3d(){
@@ -63,6 +69,9 @@ module form_3d_outer_diff(){
   difference(){
     form_3d_outer_wo();
     triangle_3d();
+    translate([-25,-30,0])
+    rotate([55,90,0])
+    cylinder(d=4,h=50,$fn=32);
   }
 }
 
@@ -72,15 +81,15 @@ module form_3d_outer(){
 }
 module form_3d_outer_wo(){
   color("#333")
-  rotate_extrude($fn=128)
+  rotate_extrude($fn=res)
   translate([inner_r+h2,0,0])
   rotate([0,0,-90])
   form_2d_outer();
 }
 module form_3d_inner(){
   color("#03b5fc")
-  rotate_extrude($fn=128)
-  translate([inner_r,0,0])
+  rotate_extrude($fn=res)
+  translate([inner_r-friction_gap_r,0,0])
   rotate([0,0,-90])
   form_2d_inner();
 }
@@ -94,7 +103,7 @@ module form_2d_outer(){
 module form_2d_inner(){
   difference(){
     form_2d_inner_plus();
-    form_2d_inner_minus_v2();
+    form_2d_inner_minus_v3();
   }
 }
 
@@ -130,6 +139,25 @@ tube_d_v2=tube_d_v2_raw+.1;
 tube_off_fac_x=.5;
 tube_off_fac_y=.85;
 tube_v2_rad_fac=.4;
+module form_2d_inner_minus_v3(){
+  offset(1.4)
+  offset(-1.4)
+  union(){
+    form_2d_inner_single_minus_v3();
+    mirror([1,0,0])
+    form_2d_inner_single_minus_v3();
+  }
+}
+inner_t=1;
+module form_2d_inner_single_minus_v3(){
+  polygon(points=[
+    [0,inner_t],
+    [0,h2],
+    [b2/2-inner_t,h2],
+    [b3/2-inner_t,inner_t],
+  ]);
+}
+
 module form_2d_inner_minus_v2(){
   offset(tube_d_v2*.4,99)
   offset(-tube_d_v2*.4,99)
@@ -158,7 +186,7 @@ module form_2d_inner_single_minus_v2(){
 module form_2d_inner_single_minus_v1(){
   translate([0,h2-tube_v1_d/2-tube_v1_off, 0])
     union(){
-      circle(r=tube_v1_d/2, $fn=64);
+      circle(r=tube_v1_d/2, $fn=res);
       translate([0,tube_v1_d/2+tube_v1_off/2, 0])
       square([tube_v1_d*.85, tube_v1_d+tube_v1_off], center=true);
     }
