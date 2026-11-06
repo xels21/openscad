@@ -1,6 +1,6 @@
 use <../libs/openscad_xels_lib/round.scad>;
 
-x=43.7;
+x=44;
 y=23.8;
 z_raw=14;
 
@@ -30,11 +30,42 @@ switch_plus_x=10;
 switch_y=20;
 switch_gap_y=10;
 
-// outer();
-outer(battery_count=1, with_cablecut=true, with_screw=true, with_switch=true);
+esp_x=18;
+esp_h=3.3;
+esp_x_cut=10.2;
 
-module outer(battery_count=1, with_cablecut=false, with_screw=false, with_switch=false){
-  z = z_raw+((battery_count-1)*battery_z);
+
+
+esp_x_sum = esp_x+2*t;
+esp_h_sum = esp_h+2*t;
+
+x_sum = x+2*t;
+y_sum = y+2*t;
+
+// digital_box(z_plus=1, w_esp=true);
+// digital_box(battery_count=1, with_cablecut=true, with_screw=true, with_switch=true, z_plus=0);
+
+module digital_box(battery_count=1,
+                   with_cablecut=false,
+                   with_screw=false,
+                   with_switch=false,
+                   z_plus=0,
+                   w_esp=false,
+                   center=false){
+  z = z_raw+((battery_count-1)*battery_z)+z_plus;
+  z_sum = z+t;
+  if(center){
+    translate([-x_sum/2,-y_sum/2,-z_sum/2])
+    _digital_box(z=z, with_cablecut=with_cablecut, with_screw=with_screw, with_switch=with_switch, z_plus=z_plus, w_esp=w_esp, center=center);
+  } else {
+    _digital_box(z=z, with_cablecut=with_cablecut, with_screw=with_screw, with_switch=with_switch, z_plus=z_plus, w_esp=w_esp, center=center);
+  }
+  // _digital_box(z=z, with_cablecut=with_cablecut, with_screw=with_screw, with_switch=with_switch, z_plus=z_plus, w_esp=w_esp, center=center);
+}
+
+
+module _digital_box(z=1, with_cablecut=false, with_screw=false, with_switch=false, z_plus=0, w_esp=false){
+  z_sum = z+t;
   difference(){
     union(){
       if(with_screw){
@@ -54,12 +85,16 @@ module outer(battery_count=1, with_cablecut=false, with_screw=false, with_switch
       #if(with_switch){
         translate([-switch_x,((y+2*t)-switch_y)/2,0])
         difference() {
-          rounded_cube_z([switch_x+switch_plus_x,switch_y,z+t], r=2);
+          ounded_cube_z([switch_x+switch_plus_x,switch_y,z+t], r=2);
           translate([0,(switch_y-switch_gap_y)/2,0])
           cube([switch_x+switch_plus_x,switch_gap_y,z+t]);
         }
       }
-      rounded_cube_z([x+2*t,y+2*t,z+t], r=r);
+      if(w_esp){
+        translate([(x_sum-esp_x_sum)/2,y+t,0])
+        rounded_cube_z([esp_x_sum,esp_h_sum,z_sum], r=1);
+      }
+      rounded_cube_z([x_sum,y_sum,z_sum], r=r);
     }
     translate([t,t,0]) 
     rounded_cube_z([x,y,z], r=r);
@@ -72,6 +107,13 @@ module outer(battery_count=1, with_cablecut=false, with_screw=false, with_switch
     if(with_cablecut){
       translate([t+(x-cablecut)/2,y,0]) 
       cube([cablecut,2*t,2*z]);
+    }
+    #if(w_esp){
+      translate([(x_sum-esp_x)/2,y+t+t,-t])
+      rounded_cube_z([esp_x,esp_h,z_sum], r=1);
+
+      translate([(x_sum-esp_x_cut)/2,y+t+t+t,0])
+      cube([esp_x_cut,esp_h,z_sum], r=1);
     }
   }
 }
