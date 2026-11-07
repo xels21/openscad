@@ -37,6 +37,8 @@ max_x=t+left_x+inner_t+battery_d+inner_t+right_x+t;
 max_y=t+battery_h+t;
 max_z=t+max_inner_z+t;
 
+
+
 // lid_z=8;
 
 log(str("##########max_inner_z: ", max_inner_z));
@@ -45,13 +47,19 @@ stabilizer=4;
 
 // preview_esp_battery_box();
 
-mirror([1,0,0])
-case();
+case(is_bottom=false,top_plus=2);
 
-module case(){
+module case(is_bottom=false, top_plus=0, bottom_inlay_plus=4){
+  mirror([is_bottom ? 1 : 0, 0, 0])
   difference(){
     translate([-battery_d/2-inner_t-left_x-t,-t,-t])
-    rounded_cube_z([(max_x),max_y,max_z*.5], r=t*.8);
+    rounded_cube_z([(max_x),max_y,(max_z+top_plus)*.5], r=t*.8);
+
+    if(!is_bottom){
+      // !translate([-battery_d/2-inner_t-left_x-t,-t,t+bottom_inlay_plus])
+      translate([-(max_x-2*t)/2,0,bottom_inlay_plus])
+      cube([(max_x-2*t),battery_h,(max_z+top_plus)*.5]);
+    }
 
     translate([-battery_d/2-inner_t-left_x,0,stabilizer])
     difference(){
