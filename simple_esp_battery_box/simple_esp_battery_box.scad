@@ -17,7 +17,7 @@ usbc_z=3;
 usbc_plus_y=t; //1;
 
 charger_x=14;
-charger_y=18;
+charger_y=18.5;
 charger_pcb_z=1.6;
 
 dcdc_x=11;
@@ -25,7 +25,7 @@ dcdc_y=22;
 dcdc_z=4;
 
 switch_x=10;
-switch_y=6;
+switch_y=5.5;
 switch_z=5;
 
 max_inner_z=max(battery_d, esp32_x);
