@@ -36,7 +36,73 @@ esp_h=3.3*diff_fac;
 esp_x_sum = esp_x+2*esp_t;
 esp_h_sum = esp_h+2*esp_t;
 
-poi_juggling_ball();
+box_controller_x=22;
+box_controller_y=27.5;
+box_controller_z=52;
+
+bottom_sphere_dif=8;
+
+poi_juggling_ball(w_spiral=true,
+                  w_battery=false,
+                  w_box_controller=true,
+                  should_mirror=true);
+
+
+module poi_juggling_ball(w_battery=false,
+                         w_spiral=false,
+                         w_led_hook=false,
+                         w_box_controller=false,
+                         should_mirror=false
+                         ){
+  mirror([should_mirror?1:0,0,0])
+  difference(){
+    sphere (d=ball_d, $fn=res);
+
+    if(w_box_controller){
+      sphere_cut=16;
+
+      translate([-ball_d/2,-ball_d/2,-ball_d])
+      cube ([ball_d,ball_d,ball_d]);
+
+      translate([0,0,0])
+      cube([box_controller_x, box_controller_y, box_controller_z], center=true);
+
+      #translate([0,0,ball_r])
+      sphere(r=sphere_cut, $fn=32);
+    }
+
+    if(w_spiral){
+      spiral(r=ball_r-led_w*.3, rr=led_w/2, iterations = 400, turns = 5, $fn=8);
+      cylinder(d=1.5*led_w, h=ball_d, $fn=32, center=true);
+      translate([0,0,-ball_r-bottom_sphere_dif/2])
+      sphere(r=bottom_sphere_dif, $fn=32);
+    }
+
+    if(w_battery){
+      // top cut
+      translate([-ball_r,-ball_r,ball_r-cut_off])
+      cube([ball_d,ball_d,ball_d]);
+    
+      translate([-battery_x/2,-battery_y/2,ball_r-battery_h-cut_off])
+      union(){
+        rounded_cube_z([battery_x,battery_y,ball_d+battery_h], r=battery_r, center=false);
+        translate([(battery_x-esp_x_sum)/2,-esp_h-esp_t,])
+        rounded_cube_z([esp_x_sum,esp_h_sum,ball_d+battery_h], r=1);
+      }
+      
+      translate([0,0,ball_r-cut_off+4-battery_h])
+      union(){
+        // rotate([90,0,0])
+        // #cylinder(d=8, h=ball_d, $fn=32, center=true);
+        rotate([90,0,90])
+        cylinder(d=8, h=ball_d, $fn=32, center=true);
+      }
+      
+      led_hook();
+    }
+  }
+}
+
 module led_hook(){
   led_hook_fac=1.8;
   x_scale=2;
@@ -52,50 +118,6 @@ module led_hook(){
   }
 }
 
-module poi_juggling_ball(){
-
-  difference(){
-    sphere (d=ball_d, $fn=res);
-
-    spiral(r=ball_r-led_w*.3, rr=led_w/2, iterations = 400, turns = 5, $fn=8);
-
-    cylinder(d=1.5*led_w, h=ball_d, $fn=32, center=true);
-
-    translate([-ball_r,-ball_r,ball_r-cut_off])
-    cube([ball_d,ball_d,ball_d]);
-
-    translate([-battery_x/2,-battery_y/2,ball_r-battery_h-cut_off])
-    union(){
-      rounded_cube_z([battery_x,battery_y,ball_d+battery_h], r=battery_r, center=false);
-      translate([(battery_x-esp_x_sum)/2,-esp_h-esp_t,])
-      rounded_cube_z([esp_x_sum,esp_h_sum,ball_d+battery_h], r=1);
-    }
-
-    translate([0,0,ball_r-cut_off+4-battery_h])
-    union(){
-      // rotate([90,0,0])
-      // #cylinder(d=8, h=ball_d, $fn=32, center=true);
-      rotate([90,0,90])
-      #cylinder(d=8, h=ball_d, $fn=32, center=true);
-    }
-
-    bottom_sphere_dif=15;
-
-    translate([0,0,-ball_r-bottom_sphere_dif/2])
-    sphere(r=bottom_sphere_dif, $fn=32);
-
-    #led_hook();
-
-    // hull()
-    // digital_box(z_plus=21, w_esp=true, center=true);
-  }
-}
-
-
-// difference(){
-  // shell();
-  // cube([100,100,100]);
-// }
 
 module shell(){
   rotate_extrude( $fn=res){
