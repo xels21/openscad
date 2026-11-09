@@ -27,7 +27,9 @@ battery_h=32;
 
 cut_off=15;
 
-led_w=7;
+led_5cm=6.5;
+led_1p5cm=6;
+led_w=led_1p5cm;
 
 esp_t=1*diff_fac;
 esp_x=18*diff_fac;
@@ -38,30 +40,32 @@ esp_h_sum = esp_h+2*esp_t;
 
 box_controller_x=22;
 box_controller_y=27.5;
-box_controller_z=52;
+box_controller_z=53;
 
 bottom_sphere_dif=8;
 
 poi_juggling_ball(w_spiral=true,
                   w_battery=false,
                   w_box_controller=true,
-                  should_mirror=true);
+                  is_top=false);
 
 
 module poi_juggling_ball(w_battery=false,
                          w_spiral=false,
                          w_led_hook=false,
                          w_box_controller=false,
-                         should_mirror=false
+                          is_top=false,
                          ){
-  mirror([should_mirror?1:0,0,0])
+  // mirror([should_mirror?1:0,0,0])
   difference(){
     sphere (d=ball_d, $fn=res);
 
     if(w_box_controller){
       sphere_cut=16;
 
-      translate([-ball_d/2,-ball_d/2,-ball_d])
+      is_top_mod = is_top?1:0;
+
+      #translate([-ball_d/2,-ball_d/2,is_top_mod*(-ball_d)])
       cube ([ball_d,ball_d,ball_d]);
 
       translate([0,0,0])
@@ -69,11 +73,15 @@ module poi_juggling_ball(w_battery=false,
 
       #translate([0,0,ball_r])
       sphere(r=sphere_cut, $fn=32);
+
+      #translate([0,0,-ball_r])
+      sphere(r=sphere_cut, $fn=32);
     }
 
     if(w_spiral){
       spiral(r=ball_r-led_w*.3, rr=led_w/2, iterations = 400, turns = 5, $fn=8);
       cylinder(d=1.5*led_w, h=ball_d, $fn=32, center=true);
+      
       translate([0,0,-ball_r-bottom_sphere_dif/2])
       sphere(r=bottom_sphere_dif, $fn=32);
     }
